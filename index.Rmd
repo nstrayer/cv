@@ -43,6 +43,7 @@ Last updated on `r Sys.Date()`.
 
 
 
+
 Main
 ================================================================================
 
@@ -145,6 +146,8 @@ Vanderbilt University Medical Center
 Johns Hopkins Data Science Lab
 
 Baltimore, MD
+
+2017
 
 - Building R Shiny applications in the contexts of wearables and statistics education.
 - Work primarily done in R Shiny and Javascript (node and d3js).
@@ -269,5 +272,5 @@ N/A
 - Uses python, matplotlib, and seaborn.
 
 
-Selected Publications and Posters {data-icon=file}
---------------------------------------------------------------------------------
+<!-- Selected Publications and Posters {data-icon=file} -->
+<!-- -------------------------------------------------------------------------------- -->
