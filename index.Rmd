@@ -1,0 +1,273 @@
+---
+title: "Nick Strayer's CV"
+author: Nick Strayer
+date: "`r Sys.Date()`"
+output:
+  pagedown::html_resume:
+    # set it to true for a self-contained HTML page but it'll take longer to render
+    self_contained: false
+---
+
+Aside
+================================================================================
+
+
+![Nick Strayer](https://pbs.twimg.com/profile_images/1145705332783616000/Hrua26iX_400x400.png){width=80%}
+
+
+Contact {#contact}
+--------------------------------------------------------------------------------
+
+- <i class="fa fa-envelope"></i> nick.strayer@gmail.com
+- <i class="fa fa-twitter"></i> [NicholasStrayer](https://twitter.com/NicholasStrayer)
+- <i class="fa fa-github"></i> [github.com/nstrayer](https://github.com/nstrayer)
+- <i class="fa fa-phone"></i> (734) 645-0110
+
+
+<!-- Skills {#skills} -->
+<!-- -------------------------------------------------------------------------------- -->
+
+<!-- - Experienced in statistical analysis, statistical learning models, and optimization methods. -->
+
+<!-- - Full experience with next generation sequencing data analysis. -->
+
+<!-- - Highly skilled in R, Bash, Perl, Python, LaTeX -->
+
+
+Disclaimer {#disclaimer}
+--------------------------------------------------------------------------------
+
+This CV was made with the R package [**pagedown**](https://github.com/rstudio/pagedown).
+
+Last updated on `r Sys.Date()`.
+
+
+
+Main
+================================================================================
+
+Nick Strayer {#title}
+--------------------------------------------------------------------------------
+
+### Currently searching for a post-doctoral position in biostatistics/informatics
+
+
+Education {data-icon=graduation-cap data-concise=true}
+--------------------------------------------------------------------------------
+
+### University of Vermont
+
+B.S., mathematics, statistics
+
+Burlington, VT
+
+2011 - 2015
+
+Minored in computer science
+
+Thesis: An agent based model of Diel Vertical Migration patterns of Mysis diluviana
+
+
+### Vanderbilt University
+
+PhD. Candidate, biostatistics
+
+Nashville, TN
+
+2015 - 2020
+
+University Graduate Fellow
+
+
+Research Experience {data-icon=laptop}
+--------------------------------------------------------------------------------
+
+### Research Assistant
+
+Adair Laboratory
+
+University of Vermont
+
+2012 - 2013
+
+- Independently analyzed and constructed statistical models for large data sets pertaining to carbon
+decomposition rates.
+
+### Undergraduate Researcher
+
+Bentil Laboratory
+
+University of Vermont
+
+2013 - 2014
+
+- Developing mathematical model to predict the transport of sulfur through the environment with
+applications in waste cleanup.
+
+### Undergraduate Researcher
+
+Rubenstein Ecosystems Science Laboratory
+
+University of Vermont
+
+2013 - 2015
+
+- Analyzed and visualized data for CATOS fish tracking project.
+- Head of data mining project to establish temporal trends in population densities of Mysis diluviana
+(Mysis).
+- Ran project to mathematically model the migration patterns of Mysis (honors thesis project.)
+
+
+### Human Computer Interaction Researcher
+
+LabInTheWild (Reineke Lab)
+
+University of Michigan
+
+2015
+
+- Led development and implementation of interactive data visualizations to help users compare
+themselves to other demographics.
+
+### Graduate Research Assistant
+
+TBILab 
+
+Vanderbilt University Medical Center
+
+2015 - 2020
+
+- Primarilly working with large EHR and Biobank datasets.
+- Developing network-based methods to investigate and visualize clinically relevant patterns in data.
+
+### Data Science Researcher
+
+Johns Hopkins Data Science Lab
+
+Baltimore, MD
+
+- Building R Shiny applications in the contexts of wearables and statistics education.
+- Work primarily done in R Shiny and Javascript (node and d3js).
+
+
+Industry Experience {data-icon=suitcase}
+--------------------------------------------------------------------------------
+
+### Software Engineering Intern
+
+Conduce
+
+Carpinteria, CA
+
+2014
+
+- Incorporated d3.js to the company's main software platform.
+
+### Engineering Intern - User Experience,
+
+Dealer.com
+
+Burlington, VT
+
+2015
+
+- Worked to help analyze and visualize user interaction with backend products.
+
+### Data Science Intern,
+
+Dealer.com
+
+Burlington, VT
+
+2015
+
+- Worked with the product analytics team to help parse and visualize large stores of data.
+
+
+### Data Artist In Residence
+
+Conduce
+
+Carpinteria, CA
+
+2014, 2015
+
+- Envisioned, prototyped and implemented visualization framework in the course of one month.
+- Constructed training protocol for bringing third parties up to speed with new protocol.
+
+
+### Data Journalist - Graphics Department
+
+New York Times
+
+New York, New York
+
+- Reporter with the graphics desk covering topics in science, politics, and sport.
+- Work primarily done in R, Javascript, and Adobe Illustrator.
+
+
+Teaching Experience {data-icon=chalkboard-teacher}
+--------------------------------------------------------------------------------
+
+### Statistical Computing in R
+
+Vanderbilt Biostatistics Department
+
+Nashville, TN
+
+2017 
+
+- TA and lectured
+- Covered introduction to R language for statistics applications
+- Graduate level class
+
+
+### Advanced Statistical Learning and Inference
+
+Vanderbilt Biostatistics Department
+
+Nashville, TN
+
+2017 - 2018
+
+- TA and lectured
+- Topics covered from penalized regression to boosted trees and neural networks
+- 3rd year PhD level class
+
+### Advanced Statistical Computing
+
+Vanderbilt Biostatistics Department
+
+Nashville, TN
+
+2018
+
+- TA and lectured
+- Covered modern statistical computing algorithms 
+- 4th year PhD level class
+
+### Data Visualization Best Practices
+
+DataCamp
+
+N/A
+ 
+2019
+
+- Designed from bottom up course to teach best practices for scientific visualizations.
+- Uses R and ggplot2.
+
+### Improving your visualization in Python
+
+DataCamp
+
+N/A
+ 
+2019
+
+- Designed from bottom up course to teach advanced methods for enhancing visualization.
+- Uses python, matplotlib, and seaborn.
+
+
+Selected Publications and Posters {data-icon=file}
+--------------------------------------------------------------------------------
