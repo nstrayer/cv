@@ -8,6 +8,13 @@ output:
     self_contained: false
 ---
 
+
+<style>
+.blocks {
+  break-inside: avoid;
+}
+</style>
+
 Aside
 ================================================================================
 
@@ -24,14 +31,13 @@ Contact {#contact}
 - <i class="fa fa-phone"></i> (734) 645-0110
 
 
-<!-- Skills {#skills} -->
-<!-- -------------------------------------------------------------------------------- -->
 
-<!-- - Experienced in statistical analysis, statistical learning models, and optimization methods. -->
+Skills {#skills}
+--------------------------------------------------------------------------------
 
-<!-- - Full experience with next generation sequencing data analysis. -->
+- 5 years of experience developing data visualizations in academic, industry, and journalism contexts.
 
-<!-- - Highly skilled in R, Bash, Perl, Python, LaTeX -->
+- Highly experienced in R, Python, and Javascript. Work heavily with Bash, SQL, C++, and AWK.  
 
 
 Disclaimer {#disclaimer}
@@ -50,7 +56,7 @@ Main
 Nick Strayer {#title}
 --------------------------------------------------------------------------------
 
-### Currently searching for a post-doctoral position in biostatistics/informatics
+Currently searching for a post-doctoral position in biostatistics/informatics
 
 
 Education {data-icon=graduation-cap data-concise=true}
@@ -76,6 +82,8 @@ PhD. Candidate, biostatistics
 Nashville, TN
 
 2015 - 2020
+
+Dissertation on Bayesian network model fitting and visualization
 
 University Graduate Fellow
 
@@ -193,7 +201,7 @@ Conduce
 
 Carpinteria, CA
 
-2014, 2015
+2014 - 2015
 
 - Envisioned, prototyped and implemented visualization framework in the course of one month.
 - Constructed training protocol for bringing third parties up to speed with new protocol.
@@ -204,6 +212,8 @@ Carpinteria, CA
 New York Times
 
 New York, New York
+
+2016
 
 - Reporter with the graphics desk covering topics in science, politics, and sport.
 - Work primarily done in R, Javascript, and Adobe Illustrator.
@@ -272,5 +282,185 @@ N/A
 - Uses python, matplotlib, and seaborn.
 
 
-<!-- Selected Publications and Posters {data-icon=file} -->
-<!-- -------------------------------------------------------------------------------- -->
+Press (About and By)  {data-icon=newspaper}
+--------------------------------------------------------------------------------
+
+### [Great paper? Swipe right on the new ‘Tinder for preprints’ app](https://www.sciencemag.org/news/2017/06/great-paper-swipe-right-new-tinder-preprints-app)
+
+Science
+
+N/A
+
+2017
+
+Story of the app [Papr](jhubiostatistics.shinyapps.io/papr/) made with Jeff Leek and Lucy D’Agostino McGowan.
+
+
+### [Swipe right for science: Papr app is ‘Tinder for preprints’](https://www.nature.com/news/swipe-right-for-science-papr-app-is-tinder-for-preprints-1.22163)
+
+Nature News
+
+N/A
+
+2017
+
+Second press article for app Papr.
+
+
+### [The Deeper Story in the Data](https://www.uvm.edu/uvmnews/news/deeper-story-data)
+
+University of Vermont Quarterly
+
+N/A
+
+2016
+
+Story on my path post graduation and the power of narrative
+
+
+### [The Great Student Migration](https://www.nytimes.com/interactive/2016/08/26/us/college-student-migration.html?smid=pl-share)
+
+The New York Times
+
+N/A
+
+2016
+
+Most shared article from the New York Times for three days.
+
+
+### [Wildfires are Getting Worse, The New York Times](https://www.nytimes.com/interactive/2016/07/25/us/wildfire-seasons-los-angeles.html)
+
+The New York Times
+
+N/A
+
+2016
+
+Data in collaboration with NASA and USGS
+
+
+### [Who’s Speaking at the Democratic National Convention?](https://www.nytimes.com/2016/07/26/upshot/democrats-may-not-be-unified-but-their-convention-speakers-are.html)
+
+The New York Times
+
+N/A
+
+2016
+
+Data scraped from CSPAN records to figure out who talked and past conventions.
+
+
+### [Who’s Speaking at the Republican National Convention?](https://www.nytimes.com/2016/07/19/upshot/whos-not-speaking-how-this-republican-convention-differs.html?smid=pl-share)
+
+The New York Times
+
+N/A
+
+2016
+
+Data scraped from CSPAN records to figure out who talked and past conventions.
+
+
+### [A Trail of Terror in
+Nice, Block by Block
+](https://www.nytimes.com/interactive/2016/07/14/world/europe/trail-of-terror-france.html)
+
+The New York Times
+
+N/A
+
+2016
+
+Led research effort to put togther story of 2016 terrorist attack in Nice, France in less than 12 hours. Work won Silver medal at Malofiej 2017, and gold at Society of News and Design.
+
+Selected Publications, Posters, and Talks {data-icon=book}
+--------------------------------------------------------------------------------
+
+::: aside
+I regularly blog about data science and visualization on my blog [LiveFreeOrDichotomize.](https://livefreeordichotomize.com/)
+:::
+
+### Asymmetric Linkage Disequilibrium: Tools for Dissecting Multiallelic LD
+
+Journal of Human Immunology
+
+N/A
+
+2015
+
+Authored with Richard Single, Vanja Paunic, Mark Albrecht, and Martin Maiers.
+
+### [An Agent Based Model of Mysis Migration](https://www.semanticscholar.org/paper/An-Agent-Based-Model-of-the-Diel-Vertical-Migration-Strayer-Stockwell/40493c78e8ecf22bd882d17ec99fd913ec4b9820)
+
+International Association of Great Lakes Research Conference
+
+N/A
+
+2015
+
+Authored with Brian O'Malley, Sture Hansson, and Jason Stockwell.
+
+### Declines of Mysis diluviana in the Great Lakes
+
+Journal of Great Lakes Research
+
+N/A
+
+2015
+
+Authored with Peter Euclide and Jason Stockwell.
+
+
+
+### [Continuous Classification using Deep Neural Networks](nickstrayer.me/qualifying_exam/)
+
+Vanderbilt Biostatistics Qualification Exam
+
+N/A
+
+2017
+
+
+### [Charge Reductions Associated with Shortening Time to Recovery in Septic Shock](https://www.ncbi.nlm.nih.gov/pubmed/30419234)
+
+Chest
+
+N/A
+
+2018
+
+Authored with Wesley H. Self, MD MPH; Dandan Liu, PhD; Stephan Russ, MD, MPH; Michael J.
+Ward, MD, PhD, MBA; Nathan I. Shapiro, MD, MPH; Todd W. Rice, MD, MSc; Matthew W. Semler,
+MD, MSc.
+
+### R timelineViz: Visualizing the distribution of study events in longitudinal studies
+
+Under-Review (copy available upon request.)
+
+N/A
+
+2018
+
+Authored with Alex Sunderman of the Vanderbilt Department of Epidemiology.
+
+
+### [Multimorbidity Explorer | A shiny app for exploring EHR and biobank data](http://nickstrayer.me/rstudioconf19_me-poster/)
+
+RStudio::conf 2019
+
+N/A
+
+2019
+
+Invited Poster. Authored with Yaomin Xu.
+
+
+### [Taking a network view of EHR and Biobank data to find explainable multivariate patterns](http://nickstrayer.me/biostat_seminar/)
+
+Vanderbilt Biostatistics Seminar Series
+
+N/A
+
+2019
+
