@@ -43,7 +43,9 @@ Skills {#skills}
 Disclaimer {#disclaimer}
 --------------------------------------------------------------------------------
 
-This CV was made with the R package [**pagedown**](https://github.com/rstudio/pagedown).
+Made with the R package [**pagedown**](https://github.com/rstudio/pagedown). 
+
+The source code is available at [github.com/nstrayer/cv](https://github.com/nstrayer/cv).
 
 Last updated on `r Sys.Date()`.
 
