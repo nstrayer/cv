@@ -8,6 +8,40 @@ output:
     self_contained: false
 ---
 
+```{r, include=FALSE}
+
+knitr::opts_chunk$set(
+  results='asis', 
+  echo = FALSE
+)
+
+library(glue)
+library(tidyverse)
+
+build_position <- function(pos){
+  if(pos$end != pos$start){
+    timeline <- glue('{pos$end} - {pos$start}')
+  } else {
+    timeline <- pos$start
+  }
+  
+  glue(
+"### {pos$title}
+
+{pos$loc}
+
+{pos$institution}
+
+{timeline}
+
+{paste('-', pos$description, collapse = '\n')}
+
+
+"
+  ) %>% print()
+}
+```
+
 
 <style>
 .blocks {
@@ -64,18 +98,6 @@ Currently searching for a post-doctoral position in biostatistics/informatics
 Education {data-icon=graduation-cap data-concise=true}
 --------------------------------------------------------------------------------
 
-### University of Vermont
-
-B.S., mathematics, statistics
-
-Burlington, VT
-
-2011 - 2015
-
-Minored in computer science
-
-Thesis: An agent based model of Diel Vertical Migration patterns of Mysis diluviana
-
 
 ### Vanderbilt University
 
@@ -83,158 +105,179 @@ PhD. Candidate, biostatistics
 
 Nashville, TN
 
-2015 - 2020
+2020 - 2015
 
-Dissertation on Bayesian network model fitting and visualization
+Dissertation on Bayesian network models and interactive biomedical visualization platforms
 
 University Graduate Fellow
+
+### University of Vermont
+
+B.S., mathematics, statistics
+
+Burlington, VT
+
+2015 - 2011 
+
+Minored in computer science
+
+Thesis: An agent based model of Diel Vertical Migration patterns of Mysis diluviana
 
 
 Research Experience {data-icon=laptop}
 --------------------------------------------------------------------------------
 
-### Research Assistant
+```{r, results='asis', echo = FALSE}
 
-Adair Laboratory
+research_positions <- list(
+  list(
+    title = "Research Assistant", 
+    loc = "Adair Laboratory", 
+    institution = "University of Vermont",
+    start = 2012,
+    end = 2013,
+    description = c('Independently analyzed and constructed statistical models for large data sets pertaining to carbon decomposition rates.')
+  ),
+   list(
+    title = "Undergraduate Researcher", 
+    loc = "Bentil Laboratory", 
+    institution = "University of Vermont",
+    start = 2013,
+    end = 2014,
+    description = c('Developed mathematical model to predict the transport of sulfur through the environment with applications in waste cleanup.')
+  ),
+  list(
+    title = "Undergraduate Researcher", 
+    loc = "Rubenstein Ecosystems Science Laboratory", 
+    institution = "University of Vermont",
+    start = 2013,
+    end = 2015,
+    description = c("Analyzed and visualized data for CATOS fish tracking project.",
+"Head of data mining project to establish temporal trends in population densities of Mysis diluviana (Mysis).",
+"Ran project to mathematically model the migration patterns of Mysis (honors thesis project.)")
+  ),
+  list(
+    title = "Human Computer Interaction Researcher", 
+    loc = "LabInTheWild (Reineke Lab)", 
+    institution = "University of Michigan",
+    start = 2015,
+    end = 2015,
+    description = c("Led development and implementation of interactive data visualizations to help users compare themselves to other demographics.")
+  ),
+  list(
+    title = "Graduate Research Assistant", 
+    loc = "TBILab (Yaomin Xu's Lab)", 
+    institution = "Vanderbilt University",
+    start = 2015,
+    end = 2020,
+    description = c("Primarilly working with large EHR and Biobank datasets.",
+"Developing network-based methods to investigate and visualize clinically relevant patterns in data.")
+  ),
+  list(
+    title = "Data Science Researcher", 
+    loc = "Data Science Lab", 
+    institution = "Johns Hopkins University",
+    start = 2017,
+    end = 2018,
+    description = c("Building R Shiny applications in the contexts of wearables and statistics education.",
+                    "Work primarily done in R Shiny and Javascript (node and d3js).")
+  )
+)
 
-University of Vermont
-
-2012 - 2013
-
-- Independently analyzed and constructed statistical models for large data sets pertaining to carbon
-decomposition rates.
-
-### Undergraduate Researcher
-
-Bentil Laboratory
-
-University of Vermont
-
-2013 - 2014
-
-- Developing mathematical model to predict the transport of sulfur through the environment with
-applications in waste cleanup.
-
-### Undergraduate Researcher
-
-Rubenstein Ecosystems Science Laboratory
-
-University of Vermont
-
-2013 - 2015
-
-- Analyzed and visualized data for CATOS fish tracking project.
-- Head of data mining project to establish temporal trends in population densities of Mysis diluviana
-(Mysis).
-- Ran project to mathematically model the migration patterns of Mysis (honors thesis project.)
+order_by_end <- function(positions){
+  order_of_positions <- positions %>% map_chr('end') %>% order(decreasing = TRUE)
+  positions[order_of_positions]
+}
 
 
-### Human Computer Interaction Researcher
 
-LabInTheWild (Reineke Lab)
+research_positions %>% 
+  order_by_end() %>% 
+  purrr::walk(build_position)
+```
 
-University of Michigan
-
-2015
-
-- Led development and implementation of interactive data visualizations to help users compare
-themselves to other demographics.
-
-### Graduate Research Assistant
-
-TBILab 
-
-Vanderbilt University Medical Center
-
-2015 - 2020
-
-- Primarilly working with large EHR and Biobank datasets.
-- Developing network-based methods to investigate and visualize clinically relevant patterns in data.
-
-### Data Science Researcher
-
-Johns Hopkins Data Science Lab
-
-Baltimore, MD
-
-2017
-
-- Building R Shiny applications in the contexts of wearables and statistics education.
-- Work primarily done in R Shiny and Javascript (node and d3js).
 
 
 Industry Experience {data-icon=suitcase}
 --------------------------------------------------------------------------------
 
-### Software Engineering Intern
+```{r}
+industry_positions <- list(
+  list(
+    title = "Software Engineering Intern", 
+    loc = "Conduce", 
+    institution = "Carpinteria, CA",
+    start = 2014,
+    end = 2014,
+    description = c("Incorporated d3.js to the company's main software platform.")
+  ),
+   list(
+    title = "Engineering Intern - User Experience", 
+    loc = "Dealer.com", 
+    institution = "Burlington, VT",
+    start = 2015,
+    end = 2015,
+    description = c("Built internal tool to help analyze and visualize user interaction with backend products.")
+  ),
+  list(
+    title = "Data Science Intern", 
+    loc = "Dealer.com", 
+    institution = "Burlington, VT",
+    start = 2015,
+    end = 2015,
+    description = c("Worked with the product analytics team to help parse and visualize large stores of data to drive business decisions.")
+  ),
+  list(
+    title = "Data Artist In Residence", 
+    loc = "Conduce", 
+    institution = "Carpinteria, CA",
+    start = 2014,
+    end = 2015,
+    description = c("Envisioned, prototyped and implemented visualization framework in the course of one month.",
+                    "Constructed training protocol for bringing third parties up to speed with new protocol.")
+  ),
+  list(
+    title = "Data Journalist - Graphics Department", 
+    loc = "New York Times", 
+    institution = "New York, New York",
+    start = 2016,
+    end = 2016,
+    description = c("Reporter with the graphics desk covering topics in science, politics, and sport.",
+                    "Work primarily done in R, Javascript, and Adobe Illustrator.",
+                    "Had most read and discussed article for entire paper for month of August, 2016.")
+  )
+)
 
-Conduce
-
-Carpinteria, CA
-
-2014
-
-- Incorporated d3.js to the company's main software platform.
-
-### Engineering Intern - User Experience,
-
-Dealer.com
-
-Burlington, VT
-
-2015
-
-- Worked to help analyze and visualize user interaction with backend products.
-
-### Data Science Intern,
-
-Dealer.com
-
-Burlington, VT
-
-2015
-
-- Worked with the product analytics team to help parse and visualize large stores of data.
-
-
-### Data Artist In Residence
-
-Conduce
-
-Carpinteria, CA
-
-2014 - 2015
-
-- Envisioned, prototyped and implemented visualization framework in the course of one month.
-- Constructed training protocol for bringing third parties up to speed with new protocol.
-
-
-### Data Journalist - Graphics Department
-
-New York Times
-
-New York, New York
-
-2016
-
-- Reporter with the graphics desk covering topics in science, politics, and sport.
-- Work primarily done in R, Javascript, and Adobe Illustrator.
+industry_positions %>% 
+  order_by_end() %>% 
+  purrr::walk(build_position)
+```
 
 
 Teaching Experience {data-icon=chalkboard-teacher}
 --------------------------------------------------------------------------------
 
-### Statistical Computing in R
+```{r}
+teaching_positions <- list(
+  list(
+    title = "Statistical Computing in R", 
+    loc = "Vanderbilt Biostatistics Department", 
+    institution = "Nashville, TN",
+    start = 2017,
+    end = 2017,
+    description = c("TA and lectured",
+"Covered introduction to R language for statistics applications",
+"Graduate level class")
+  )
+)
 
-Vanderbilt Biostatistics Department
+teaching_positions %>% 
+  order_by_end() %>% 
+  purrr::walk(build_position)
+```
 
-Nashville, TN
 
-2017 
 
-- TA and lectured
-- Covered introduction to R language for statistics applications
-- Graduate level class
 
 
 ### Advanced Statistical Learning and Inference
