@@ -1,3 +1,19 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat|Playfair+Display&display=swap');
+
+/* Font stuffs */
+body{
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  line-height: 1.3;
+  color: #444;
+}
+
+h1, h2, h3{
+  font-family: 'Playfair Display', serif;
+  color: #000;
+}
+
+
 @page{
   size: letter portrait;
   margin: 1in 0.5in 1in 0.25in;
@@ -17,7 +33,7 @@
   --content-width: calc(var(--page-width) - var(--margin-right) - var(--margin-left));
   --root-font-size: 12pt;
   --sidebar-width: 11rem;
-  --sidebar-background-color: #f2f2f2;
+  --sidebar-background-color: #f7fbff;
   --main-width: calc(var(--content-width) - var(--sidebar-width));
   --decorator-horizontal-margin: 0.2in;
 
@@ -27,8 +43,8 @@
   --decorator-outer-offset-top: 10px;
   --decorator-outer-offset-left: -5.5px;
   --decorator-border-width: 1px;
-  --decorator-outer-dim: 9px;
-  --decorator-border: 1px solid #ccc;
+  --decorator-outer-dim: 10px;
+  --decorator-border: 2px solid #bdd7e7;
 
   --row-blocks-padding-top: 0.5rem;
   --date-block-width: 0.7in;
@@ -49,23 +65,37 @@
   background: linear-gradient(to left, var(--sidebar-background-color), var(--sidebar-background-color) var(--sidebar-background-width), white var(--sidebar-background-width));
 }
 
+/* Things I have changed from the unexposed pagedjs css */
+.details .place {
+  margin-top: 0.25rem;
+}
+
+.main-block:not(.concise) .details div {
+  padding-top: 0.005rem;
+}
+
+/* This icon isn't centered by default which is lame */ 
+.fa-laptop {
+  margin-left: -2px;
+}
+
+
+/* End things I have changed */ 
+
+
 html {
   font-size: var(--root-font-size);
 }
 
 body{
   width: var(--content-width);
-  font-family: "Open Sans", sans-serif;
-  font-weight: 300;
-  line-height: 1.3;
-  color: #444;
   hyphens: auto;
 }
 
 h1, h2, h3{
   margin: 0;
-  color: #000;
 }
+
 
 #main > h1, #aside > h1, #disclaimer > h2 {
   display: none;
@@ -256,7 +286,7 @@ h1, h2{
   width: calc(var(--decorator-outer-dim) - (var(--decorator-border-width) * 2));
   height: calc(var(--decorator-outer-dim) - (var(--decorator-border-width) * 2));
   border-radius: calc((var(--decorator-outer-dim) - (var(--decorator-border-width) * 2)) / 2);
-  background-color: #555;
+  background-color: #08306b;
 }
 
 .blocks:last-child .decorator{ /* slightly shortens it */
@@ -369,7 +399,7 @@ h1, h2{
 }
 
 #skills{
-  line-height: 1.5;
+  line-height: 1.2;
 }
 
 #skills ul{

@@ -54,94 +54,43 @@ order_by_end <- function(positions){
   order_of_positions <- positions %>% map_chr('end') %>% order(decreasing = TRUE)
   positions[order_of_positions]
 }
+
+print_section <- function(section_data){
+  section_data %>% 
+    order_by_end() %>% 
+    purrr::walk(build_position)
+}
 ```
 
 
-<style>
-.blocks {
-  break-inside: avoid;
-}
-</style>
 
-Aside
-================================================================================
+```{r position_data}
+education <- list(
+  list(
+    loc = "Vanderbilt University",
+    title = "PhD. Candidate, biostatistics",
+    institution = "Nashville, TN",
+    start = 2015,
+    end = 2020,
+    description = c(
+      "Dissertation on Bayesian network models and interactive biomedical visualization platforms",
+      "University Graduate Fellow",
+      "Elected member Graduate Student Council"
+    )
+  ),
+  list(
+    loc = "University of Vermont",
+    title = "B.S., mathematics, statistics",
+    institution = "Burlington, VT",
+    start = 2011,
+    end = 2015,
+    description = c(
+      "Minored in computer science",
+      "Thesis: An agent based model of Diel Vertical Migration patterns of Mysis diluviana"
+    )
+  )
+)
 
-
-![Nick Strayer](https://pbs.twimg.com/profile_images/1145705332783616000/Hrua26iX_400x400.png){width=80%}
-
-
-Contact {#contact}
---------------------------------------------------------------------------------
-
-- <i class="fa fa-envelope"></i> nick.strayer@gmail.com
-- <i class="fa fa-twitter"></i> [NicholasStrayer](https://twitter.com/NicholasStrayer)
-- <i class="fa fa-github"></i> [github.com/nstrayer](https://github.com/nstrayer)
-- <i class="fa fa-phone"></i> (734) 645-0110
-
-
-
-Skills {#skills}
---------------------------------------------------------------------------------
-
-- 5 years of experience developing data visualizations in academic, industry, and journalism contexts.
-
-- Highly experienced in R, Python, and Javascript. Work heavily with Bash, SQL, C++, and AWK.  
-
-
-Disclaimer {#disclaimer}
---------------------------------------------------------------------------------
-
-Made with the R package [**pagedown**](https://github.com/rstudio/pagedown). 
-
-The source code is available at [github.com/nstrayer/cv](https://github.com/nstrayer/cv).
-
-Last updated on `r Sys.Date()`.
-
-
-
-
-Main
-================================================================================
-
-Nick Strayer {#title}
---------------------------------------------------------------------------------
-
-Currently searching for Data Scientist positions
-
-
-Education {data-icon=graduation-cap data-concise=true}
---------------------------------------------------------------------------------
-
-
-### Vanderbilt University
-
-PhD. Candidate, biostatistics
-
-Nashville, TN
-
-2020 - 2015
-
-Dissertation on Bayesian network models and interactive biomedical visualization platforms
-
-University Graduate Fellow
-
-### University of Vermont
-
-B.S., mathematics, statistics
-
-Burlington, VT
-
-2015 - 2011 
-
-Minored in computer science
-
-Thesis: An agent based model of Diel Vertical Migration patterns of Mysis diluviana
-
-
-Research Experience {data-icon=laptop}
---------------------------------------------------------------------------------
-
-```{r, results='asis', echo = FALSE}
 research_positions <- list(
   list(
     title = "Research Assistant", 
@@ -198,17 +147,6 @@ research_positions <- list(
   )
 )
 
-research_positions %>% 
-  order_by_end() %>% 
-  purrr::walk(build_position)
-```
-
-
-
-Industry Experience {data-icon=suitcase}
---------------------------------------------------------------------------------
-
-```{r}
 industry_positions <- list(
   list(
     title = "Software Engineering Intern", 
@@ -255,16 +193,7 @@ industry_positions <- list(
   )
 )
 
-industry_positions %>% 
-  order_by_end() %>% 
-  purrr::walk(build_position)
-```
 
-
-Teaching Experience {data-icon=chalkboard-teacher}
---------------------------------------------------------------------------------
-
-```{r}
 teaching_positions <- list(
   list(
     title = "Statistical Computing in R", 
@@ -319,18 +248,8 @@ teaching_positions <- list(
   )
 )
 
-teaching_positions %>% 
-  order_by_end() %>% 
-  purrr::walk(build_position)
-```
 
 
-
-
-Selected Press (About)  {data-icon=newspaper}
---------------------------------------------------------------------------------
-
-```{r}
 about_me_press <- list(
   list(
     title = "[Great paper? Swipe right on the new ‘Tinder for preprints’ app](https://www.sciencemag.org/news/2017/06/great-paper-swipe-right-new-tinder-preprints-app)", 
@@ -358,16 +277,7 @@ about_me_press <- list(
   )
 )
 
-about_me_press %>% 
-  order_by_end() %>% 
-  purrr::walk(build_position)
-```
 
-
-Selected Press (By)  {data-icon=newspaper}
---------------------------------------------------------------------------------
-
-```{r}
 by_me_press <- list(
   list(
     title = "[The Great Student Migration](https://www.nytimes.com/interactive/2016/08/26/us/college-student-migration.html?smid=pl-share)", 
@@ -413,25 +323,6 @@ by_me_press <- list(
   )
 )
 
-by_me_press %>% 
-  order_by_end() %>% 
-  purrr::walk(build_position)
-```
-
-
-
-
-
-Selected Publications, Posters, and Talks {data-icon=book}
---------------------------------------------------------------------------------
-
-
-
-::: aside
-I regularly blog about data science and visualization on my blog [LiveFreeOrDichotomize.](https://livefreeordichotomize.com/)
-:::
-
-```{r}
 academic_articles <- list(
   list(
     title = "Asymmetric Linkage Disequilibrium: Tools for Dissecting Multiallelic LD", 
@@ -514,14 +405,202 @@ academic_articles <- list(
       "Bayesian network analysis used to find robust novel subgroups of patients with given genetic mutations.",
       "Analysis done using method built for my dissertation.")
   )
-  
 )
 
-academic_articles %>% 
-  order_by_end() %>% 
-  purrr::walk(build_position)
+data_science_writings <- list(
+  list(
+    title = "[Classifying physical activity from smartphone data](https://blogs.rstudio.com/tensorflow/posts/2018-07-17-activity-detection/)",
+    loc = "RStudio Tensorflow Blog", 
+    end = 2018,
+    description = c(
+      "Walk through of training a convolutional nueral network to acheive state of the art recognition of activities from accelerometer data.",
+      "Contracted article.")
+  ),
+  list(
+    title = "[Using AWK and R to parse 25tb](https://livefreeordichotomize.com/2019/06/04/using_awk_and_r_to_parse_25tb/)",
+    loc = 'LiveFreeOrDichotomize.com',
+    end = 2019,
+    description = c(
+      "Story of parsing large amounts of genomics data.",
+      "Provided advice for dealing with data much larger than disk.",
+      "Reached top of HackerNews."
+    )
+  ),
+   list(
+    title = "[The United States of Seasons](https://livefreeordichotomize.com/2018/02/12/the-united-states-of-seasons/)",
+    loc = 'LiveFreeOrDichotomize.com',
+    end = 2018,
+    description = c(
+      "GIS analysis of weather data to find the most 'seasonal' locations in United States",
+      "Used bayesian regression methods for smoothing sparse geospatial data."
+    )
+  ),
+  list(
+    title = "[A year as told by fitbit](https://livefreeordichotomize.com/2017/12/27/a-year-as-told-by-fitbit/)",
+    loc = 'LiveFreeOrDichotomize.com',
+    end = 2017,
+    description = c(
+      "Analysing a full years worth of second-level heart rate data from wearable device.",
+      "Demonstrated visualization-based inference for large data."
+    )
+  ),
+  list(
+    title = "[MCMC and the case of the spilled seeds](https://livefreeordichotomize.com/2017/10/14/mcmc-and-the-case-of-the-spilled-seeds/)",
+    loc = 'LiveFreeOrDichotomize.com',
+    end = 2017,
+    description = c(
+      "Full bayesian MCMC sampler running in your browser.",
+      "Coded from scratch in vanilla Javascript."
+    )
+  ),
+  list(
+    title = "[The traveling metallurgist](https://livefreeordichotomize.com/2017/09/25/the-traveling-metallurgist/)",
+    loc = 'LiveFreeOrDichotomize.com',
+    end = 2017,
+    description = c(
+      "Pure javascript implementation of traveling salesman solution using simulated annealing.",
+      "Allows reader to customize the number and location of cities to attempt to trick the algorithm."
+    )
+  )
+)
+
+```
+
+
+<style>
+.blocks {
+  break-inside: avoid;
+}
+</style>
+
+Aside
+================================================================================
+
+
+![Nick Strayer](https://pbs.twimg.com/profile_images/1145705332783616000/Hrua26iX_400x400.png){width=80%}
+
+
+Contact {#contact}
+--------------------------------------------------------------------------------
+
+- <i class="fa fa-envelope"></i> nick.strayer@gmail.com
+- <i class="fa fa-twitter"></i> [NicholasStrayer](https://twitter.com/NicholasStrayer)
+- <i class="fa fa-github"></i> [github.com/nstrayer](https://github.com/nstrayer)
+- <i class="fa fa-phone"></i> (734) 645-0110
+
+
+
+Skills {#skills}
+--------------------------------------------------------------------------------
+
+
+
+- Highly experienced in
+    - R 
+    - Python
+    - Javascript. 
+- Experience with
+    - Bash
+    - SQL
+    - C++
+    - AWK.  
+
+
+Disclaimer {#disclaimer}
+--------------------------------------------------------------------------------
+
+Made with the R package [**pagedown**](https://github.com/rstudio/pagedown). 
+
+The source code is available at [github.com/nstrayer/cv](https://github.com/nstrayer/cv).
+
+Last updated on `r Sys.Date()`.
+
+
+
+Main
+================================================================================
+
+Nick Strayer {#title}
+--------------------------------------------------------------------------------
+
+I have made [visualizations viewed by hundreds of thousands of people](https://www.nytimes.com/interactive/2016/08/26/us/college-student-migration.html), [sped up query times for 25 terrabytes of data by an average of 4,800 times](https://livefreeordichotomize.com/2019/06/04/using_awk_and_r_to_parse_25tb/), and built [packages for R](https://github.com/nstrayer/shinysense) that let you [do magic](http://nickstrayer.me/dataDayTexas/). 
+
+Currently searching for Data Scientist positions. 
+
+
+
+Education {data-icon=graduation-cap data-concise=true}
+--------------------------------------------------------------------------------
+
+```{r, results='asis', echo = FALSE}
+education %>% print_section()
 ```
 
 
 
-## Links
+Research Experience {data-icon=laptop}
+--------------------------------------------------------------------------------
+
+```{r, results='asis', echo = FALSE}
+research_positions %>% print_section()
+```
+
+
+
+Industry Experience {data-icon=suitcase}
+--------------------------------------------------------------------------------
+
+```{r}
+industry_positions %>% print_section()
+```
+
+
+Teaching Experience {data-icon=chalkboard-teacher}
+--------------------------------------------------------------------------------
+
+```{r}
+teaching_positions %>% print_section()
+```
+
+
+Selected Data Science Writing {data-icon=chart-line}
+--------------------------------------------------------------------------------
+
+
+```{r}
+data_science_writings %>% print_section()
+```
+
+
+
+Selected Press (About)  {data-icon=newspaper}
+--------------------------------------------------------------------------------
+
+```{r}
+about_me_press %>% print_section()
+```
+
+
+Selected Press (By)  {data-icon=newspaper}
+--------------------------------------------------------------------------------
+
+```{r}
+by_me_press %>% print_section()
+```
+
+
+
+
+Selected Publications, Posters, and Talks {data-icon=book}
+--------------------------------------------------------------------------------
+
+
+::: aside
+I regularly blog about data science and visualization on my blog [LiveFreeOrDichotomize.](https://livefreeordichotomize.com/)
+:::
+
+```{r}
+academic_articles %>% print_section()
+```
+
+
