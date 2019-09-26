@@ -4,8 +4,10 @@ author: Nick Strayer
 date: "`r Sys.Date()`"
 output:
   pagedown::html_resume:
+    css: ['styles.css']
     # set it to true for a self-contained HTML page but it'll take longer to render
-    self_contained: true
+    self_contained: false
+links-to-footnotes: true
 ---
 
 ```{r, include=FALSE}
@@ -520,3 +522,6 @@ academic_articles %>%
   purrr::walk(build_position)
 ```
 
+
+
+## Links
