@@ -19,18 +19,24 @@ library(glue)
 library(tidyverse)
 
 build_position <- function(pos){
-  if(pos$end != pos$start){
-    timeline <- glue('{pos$end} - {pos$start}')
+
+  missing_start <- is.null(pos$start)
+  dates_same <- pos$end == pos$start
+  
+  if(any(c(missing_start,dates_same))){
+    timeline <- pos$end
   } else {
-    timeline <- pos$start
+    timeline <- glue('{pos$end} - {pos$start}')
   }
+  
+  institution <- if(is.null(pos$institution)) 'N/A' else pos$institution
   
   glue(
 "### {pos$title}
 
 {pos$loc}
 
-{pos$institution}
+{institution}
 
 {timeline}
 
@@ -39,6 +45,12 @@ build_position <- function(pos){
 
 "
   ) %>% print()
+}
+
+
+order_by_end <- function(positions){
+  order_of_positions <- positions %>% map_chr('end') %>% order(decreasing = TRUE)
+  positions[order_of_positions]
 }
 ```
 
@@ -92,7 +104,7 @@ Main
 Nick Strayer {#title}
 --------------------------------------------------------------------------------
 
-Currently searching for a post-doctoral position in biostatistics/informatics
+Currently searching for Data Scientist positions
 
 
 Education {data-icon=graduation-cap data-concise=true}
@@ -128,7 +140,6 @@ Research Experience {data-icon=laptop}
 --------------------------------------------------------------------------------
 
 ```{r, results='asis', echo = FALSE}
-
 research_positions <- list(
   list(
     title = "Research Assistant", 
@@ -179,17 +190,11 @@ research_positions <- list(
     institution = "Johns Hopkins University",
     start = 2017,
     end = 2018,
-    description = c("Building R Shiny applications in the contexts of wearables and statistics education.",
-                    "Work primarily done in R Shiny and Javascript (node and d3js).")
+    description = c(
+      "Building R Shiny applications in the contexts of wearables and statistics education.",
+      "Work primarily done in R Shiny and Javascript (node and d3js).")
   )
 )
-
-order_by_end <- function(positions){
-  order_of_positions <- positions %>% map_chr('end') %>% order(decreasing = TRUE)
-  positions[order_of_positions]
-}
-
-
 
 research_positions %>% 
   order_by_end() %>% 
@@ -268,6 +273,47 @@ teaching_positions <- list(
     description = c("TA and lectured",
 "Covered introduction to R language for statistics applications",
 "Graduate level class")
+  ),
+  list(
+    title = "Advanced Statistical Learning and Inference", 
+    loc = "Vanderbilt Biostatistics Department", 
+    institution = "Nashville, TN",
+    start = 2017,
+    end = 2018,
+    description = c("TA and lectured",
+                    "Topics covered from penalized regression to boosted trees and neural networks",
+                    "Highest level course offered in department")
+  ),
+  list(
+    title = "Advanced Statistical Computing", 
+    loc = "Vanderbilt Biostatistics Department", 
+    institution = "Nashville, TN",
+    start = 2018,
+    end = 2018,
+    description = c("TA and lectured",
+                    "Covered modern statistical computing algorithms ",
+                    "4th year PhD level class")
+  ),
+  list(
+    title = "Data Visualization Best Practices", 
+    loc = "DataCamp", 
+    institution = "N/A",
+    start = 2019,
+    end = 2019,
+    description = c(
+      "Designed from bottom up course to teach best practices for scientific visualizations.",
+      "Uses R and ggplot2.",
+      "In top 10% on platform by popularity.")
+  ),
+  list(
+    title = " Improving your visualization in Python", 
+    loc = "DataCamp", 
+    institution = "N/A",
+    start = 2019,
+    end = 2019,
+    description = c(
+      "Designed from bottom up course to teach advanced methods for enhancing visualization.",
+      "Uses python, matplotlib, and seaborn.")
   )
 )
 
@@ -279,233 +325,198 @@ teaching_positions %>%
 
 
 
-
-### Advanced Statistical Learning and Inference
-
-Vanderbilt Biostatistics Department
-
-Nashville, TN
-
-2017 - 2018
-
-- TA and lectured
-- Topics covered from penalized regression to boosted trees and neural networks
-- 3rd year PhD level class
-
-### Advanced Statistical Computing
-
-Vanderbilt Biostatistics Department
-
-Nashville, TN
-
-2018
-
-- TA and lectured
-- Covered modern statistical computing algorithms 
-- 4th year PhD level class
-
-### Data Visualization Best Practices
-
-DataCamp
-
-N/A
- 
-2019
-
-- Designed from bottom up course to teach best practices for scientific visualizations.
-- Uses R and ggplot2.
-
-### Improving your visualization in Python
-
-DataCamp
-
-N/A
- 
-2019
-
-- Designed from bottom up course to teach advanced methods for enhancing visualization.
-- Uses python, matplotlib, and seaborn.
-
-
-Press (About and By)  {data-icon=newspaper}
+Selected Press (About)  {data-icon=newspaper}
 --------------------------------------------------------------------------------
 
-### [Great paper? Swipe right on the new ‘Tinder for preprints’ app](https://www.sciencemag.org/news/2017/06/great-paper-swipe-right-new-tinder-preprints-app)
+```{r}
+about_me_press <- list(
+  list(
+    title = "[Great paper? Swipe right on the new ‘Tinder for preprints’ app](https://www.sciencemag.org/news/2017/06/great-paper-swipe-right-new-tinder-preprints-app)", 
+    loc = "Science", 
+    institution = "N/A",
+    start = 2017,
+    end = 2017,
+    description = c("Story of the app [Papr](jhubiostatistics.shinyapps.io/papr/) made with Jeff Leek and Lucy D’Agostino McGowan.")
+  ),
+  list(
+    title = "[Swipe right for science: Papr app is ‘Tinder for preprints’](https://www.nature.com/news/swipe-right-for-science-papr-app-is-tinder-for-preprints-1.22163)", 
+    loc = "Nature News", 
+    institution = "N/A",
+    start = 2017,
+    end = 2017,
+    description = c("Second press article for app Papr.")
+  ),
+  list(
+    title = "[The Deeper Story in the Data](https://www.uvm.edu/uvmnews/news/deeper-story-data)", 
+    loc = "University of Vermont Quarterly", 
+    institution = "N/A",
+    start = 2016,
+    end = 2016,
+    description = c("Story on my path post graduation and the power of narrative.")
+  )
+)
 
-Science
-
-N/A
-
-2017
-
-Story of the app [Papr](jhubiostatistics.shinyapps.io/papr/) made with Jeff Leek and Lucy D’Agostino McGowan.
-
-
-### [Swipe right for science: Papr app is ‘Tinder for preprints’](https://www.nature.com/news/swipe-right-for-science-papr-app-is-tinder-for-preprints-1.22163)
-
-Nature News
-
-N/A
-
-2017
-
-Second press article for app Papr.
-
-
-### [The Deeper Story in the Data](https://www.uvm.edu/uvmnews/news/deeper-story-data)
-
-University of Vermont Quarterly
-
-N/A
-
-2016
-
-Story on my path post graduation and the power of narrative
-
-
-### [The Great Student Migration](https://www.nytimes.com/interactive/2016/08/26/us/college-student-migration.html?smid=pl-share)
-
-The New York Times
-
-N/A
-
-2016
-
-Most shared article from the New York Times for three days.
+about_me_press %>% 
+  order_by_end() %>% 
+  purrr::walk(build_position)
+```
 
 
-### [Wildfires are Getting Worse, The New York Times](https://www.nytimes.com/interactive/2016/07/25/us/wildfire-seasons-los-angeles.html)
+Selected Press (By)  {data-icon=newspaper}
+--------------------------------------------------------------------------------
 
-The New York Times
+```{r}
+by_me_press <- list(
+  list(
+    title = "[The Great Student Migration](https://www.nytimes.com/interactive/2016/08/26/us/college-student-migration.html?smid=pl-share)", 
+    loc = "The New York Times", 
+    institution = "N/A",
+    start = 2016,
+    end = 2016,
+    description = c("Most shared and discussed article from the New York Times for August 2016.")
+  ),
+  list(
+    title = "[Wildfires are Getting Worse, The New York Times](https://www.nytimes.com/interactive/2016/07/25/us/wildfire-seasons-los-angeles.html)", 
+    loc = "The New York Times", 
+    institution = "N/A",
+    start = 2016,
+    end = 2016,
+    description = c("GIS analysis and modeling of fire patterns and trends","Data in collaboration with NASA and USGS")
+  ),
+  list(
+    title = "[Who’s Speaking at the Democratic National Convention?](https://www.nytimes.com/2016/07/26/upshot/democrats-may-not-be-unified-but-their-convention-speakers-are.html)", 
+    loc = "The New York Times", 
+    institution = "N/A",
+    start = 2016,
+    end = 2016,
+    description = c("Data scraped from CSPAN records to figure out who talked and past conventions.")
+  ),
+  list(
+    title = "[Who’s Speaking at the Republican National Convention?](https://www.nytimes.com/2016/07/19/upshot/whos-not-speaking-how-this-republican-convention-differs.html?smid=pl-share))", 
+    loc = "The New York Times", 
+    institution = "N/A",
+    start = 2016,
+    end = 2016,
+    description = c("Used same data scraping techniques as Who’s Speaking at the Democratic National Convention?")
+  ),
+  list(
+    title = "[A Trail of Terror in Nice, Block by Block](https://www.nytimes.com/interactive/2016/07/14/world/europe/trail-of-terror-france.html)", 
+    loc = "The New York Times", 
+    institution = "N/A",
+    start = 2016,
+    end = 2016,
+    description = c(
+      "Led research effort to put togther story of 2016 terrorist attack in Nice, France in less than 12 hours.", 
+      "Work won Silver medal at Malofiej 2017, and gold at Society of News and Design.")
+  )
+)
 
-N/A
-
-2016
-
-Data in collaboration with NASA and USGS
-
-
-### [Who’s Speaking at the Democratic National Convention?](https://www.nytimes.com/2016/07/26/upshot/democrats-may-not-be-unified-but-their-convention-speakers-are.html)
-
-The New York Times
-
-N/A
-
-2016
-
-Data scraped from CSPAN records to figure out who talked and past conventions.
+by_me_press %>% 
+  order_by_end() %>% 
+  purrr::walk(build_position)
+```
 
 
-### [Who’s Speaking at the Republican National Convention?](https://www.nytimes.com/2016/07/19/upshot/whos-not-speaking-how-this-republican-convention-differs.html?smid=pl-share)
-
-The New York Times
-
-N/A
-
-2016
-
-Data scraped from CSPAN records to figure out who talked and past conventions.
 
 
-### [A Trail of Terror in
-Nice, Block by Block
-](https://www.nytimes.com/interactive/2016/07/14/world/europe/trail-of-terror-france.html)
-
-The New York Times
-
-N/A
-
-2016
-
-Led research effort to put togther story of 2016 terrorist attack in Nice, France in less than 12 hours. Work won Silver medal at Malofiej 2017, and gold at Society of News and Design.
 
 Selected Publications, Posters, and Talks {data-icon=book}
 --------------------------------------------------------------------------------
+
+
 
 ::: aside
 I regularly blog about data science and visualization on my blog [LiveFreeOrDichotomize.](https://livefreeordichotomize.com/)
 :::
 
-### Asymmetric Linkage Disequilibrium: Tools for Dissecting Multiallelic LD
+```{r}
+academic_articles <- list(
+  list(
+    title = "Asymmetric Linkage Disequilibrium: Tools for Dissecting Multiallelic LD", 
+    loc = "Journal of Human Immunology", 
+    institution = "N/A",
+    start = 2015,
+    end = 2015,
+    description = c("Authored with Richard Single, Vanja Paunic, Mark Albrecht, and Martin Maiers.")
+  ),
+  list(
+    title = "[An Agent Based Model of Mysis Migration](https://www.semanticscholar.org/paper/An-Agent-Based-Model-of-the-Diel-Vertical-Migration-Strayer-Stockwell/40493c78e8ecf22bd882d17ec99fd913ec4b9820)", 
+    loc = "International Association of Great Lakes Research Conference", 
+    institution = "N/A",
+    start = 2015,
+    end = 2015,
+    description = c("Authored with Brian O'Malley, Sture Hansson, and Jason Stockwell.")
+  ),
+  list(
+    title = "Declines of Mysis diluviana in the Great Lakes", 
+    loc = "Journal of Great Lakes Research", 
+    institution = "N/A",
+    start = 2015,
+    end = 2015,
+    description = c("Authored with Peter Euclide and Jason Stockwell.")
+  ),
+  list(
+    title = "[Continuous Classification using Deep Neural Networks](nickstrayer.me/qualifying_exam/)", 
+    loc = "Vanderbilt Biostatistics Qualification Exam", 
+    institution = "N/A",
+    start = 2017,
+    end = 2017,
+    description = c("Review of methods for classifying continuous data streams using neural networks",
+                    "Sucessfully met qualifying examination standards")
+  ),
+  list(
+    title = "[Charge Reductions Associated with Shortening Time to Recovery in Septic Shock](https://www.ncbi.nlm.nih.gov/pubmed/30419234)", 
+    loc = "Chest", 
+    institution = "N/A",
+    start = 2019,
+    end = 2019,
+    description = c("Authored with Wesley H. Self, MD MPH; Dandan Liu, PhD; Stephan Russ, MD, MPH; Michael J. Ward, MD, PhD, MBA; Nathan I. Shapiro, MD, MPH; Todd W. Rice, MD, MSc; Matthew W. Semler, MD, MSc.")
+  ),
+  list(
+    title = "R timelineViz: Visualizing the distribution of study events in longitudinal studies", 
+    loc = "Under-Review (copy available upon request.)", 
+    institution = "N/A",
+    start = 2018,
+    end = 2018,
+    description = c("Authored with Alex Sunderman of the Vanderbilt Department of Epidemiology.")
+  ),
+  list(
+    title = "[Multimorbidity Explorer | A shiny app for exploring EHR and biobank data](http://nickstrayer.me/rstudioconf19_me-poster/)", 
+    loc = "RStudio::conf 2019", 
+    institution = "N/A",
+    start = 2019,
+    end = 2019,
+    description = c("Contributed Poster. Authored with Yaomin Xu.")
+  ),
+  list(
+    title = "[Taking a network view of EHR and Biobank data to find explainable multivariate patterns](http://nickstrayer.me/biostat_seminar/)",
+    loc = "Vanderbilt Biostatistics Seminar Series", 
+    institution = "N/A",
+    start = 2019,
+    end = 2019,
+    description = c("University wide seminar series.")
+  ),
+  list(
+    title = "Patient-specific risk factors independently influence survival in Myelodysplastic Syndromes in an unbiased review of EHR records",
+    loc = "Under-Review (copy available upon request.)", 
+    end = 2019,
+    description = c(
+      "Bayesian network analysis used to find novel subgroups of patients with Myelodysplastic Syndromes (MDS).",
+      "Analysis done using method built for my dissertation.")
+  ),
+  list(
+    title = "Patient specific comorbidities impact overall survival in myelofibrosis",
+    loc = "Under-Review (copy available upon request.)", 
+    end = 2019,
+    description = c(
+      "Bayesian network analysis used to find robust novel subgroups of patients with given genetic mutations.",
+      "Analysis done using method built for my dissertation.")
+  )
+  
+)
 
-Journal of Human Immunology
-
-N/A
-
-2015
-
-Authored with Richard Single, Vanja Paunic, Mark Albrecht, and Martin Maiers.
-
-### [An Agent Based Model of Mysis Migration](https://www.semanticscholar.org/paper/An-Agent-Based-Model-of-the-Diel-Vertical-Migration-Strayer-Stockwell/40493c78e8ecf22bd882d17ec99fd913ec4b9820)
-
-International Association of Great Lakes Research Conference
-
-N/A
-
-2015
-
-Authored with Brian O'Malley, Sture Hansson, and Jason Stockwell.
-
-### Declines of Mysis diluviana in the Great Lakes
-
-Journal of Great Lakes Research
-
-N/A
-
-2015
-
-Authored with Peter Euclide and Jason Stockwell.
-
-
-
-### [Continuous Classification using Deep Neural Networks](nickstrayer.me/qualifying_exam/)
-
-Vanderbilt Biostatistics Qualification Exam
-
-N/A
-
-2017
-
-
-### [Charge Reductions Associated with Shortening Time to Recovery in Septic Shock](https://www.ncbi.nlm.nih.gov/pubmed/30419234)
-
-Chest
-
-N/A
-
-2018
-
-Authored with Wesley H. Self, MD MPH; Dandan Liu, PhD; Stephan Russ, MD, MPH; Michael J.
-Ward, MD, PhD, MBA; Nathan I. Shapiro, MD, MPH; Todd W. Rice, MD, MSc; Matthew W. Semler,
-MD, MSc.
-
-### R timelineViz: Visualizing the distribution of study events in longitudinal studies
-
-Under-Review (copy available upon request.)
-
-N/A
-
-2018
-
-Authored with Alex Sunderman of the Vanderbilt Department of Epidemiology.
-
-
-### [Multimorbidity Explorer | A shiny app for exploring EHR and biobank data](http://nickstrayer.me/rstudioconf19_me-poster/)
-
-RStudio::conf 2019
-
-N/A
-
-2019
-
-Invited Poster. Authored with Yaomin Xu.
-
-
-### [Taking a network view of EHR and Biobank data to find explainable multivariate patterns](http://nickstrayer.me/biostat_seminar/)
-
-Vanderbilt Biostatistics Seminar Series
-
-N/A
-
-2019
+academic_articles %>% 
+  order_by_end() %>% 
+  purrr::walk(build_position)
+```
 
