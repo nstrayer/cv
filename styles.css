@@ -18,6 +18,13 @@ sup{
   font-style: italic;
 }
 
+.blocks {
+  break-inside: avoid;
+}
+
+.aside {
+  font-size: 0.75rem;
+}
 
 @page{
   size: letter portrait;
@@ -37,7 +44,7 @@ sup{
   --margin-left: 0.25in;
   --content-width: calc(var(--page-width) - var(--margin-right) - var(--margin-left));
   --root-font-size: 12pt;
-  --sidebar-width: 11rem;
+  --sidebar-width: 12rem;
   --sidebar-background-color: #f7fbff;
   --main-width: calc(var(--content-width) - var(--sidebar-width));
   --decorator-horizontal-margin: 0.2in;
@@ -153,9 +160,9 @@ img{
 }
 
 .aside{
-  width: var(--sidebar-width);
+  width: calc(var(--sidebar-width) + 9px);
   padding: 0.6in var(--sidebar-horizontal-padding);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   float: right;
   position: absolute;
   right: 0;

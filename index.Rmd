@@ -6,7 +6,7 @@ output:
   pagedown::html_resume:
     css: ['styles.css']
     # set it to true for a self-contained HTML page but it'll take longer to render
-    self_contained: false
+    self_contained: true
 ---
 
 ```{r, include=FALSE}
@@ -19,7 +19,7 @@ library(glue)
 library(tidyverse)
 
 # Set this to true to have links turned into footnotes at the end of the document
-PDF_EXPORT <- TRUE
+PDF_EXPORT <- FALSE
 
 # Holds all the links that were inserted for placement at the end
 links <- c()
@@ -114,13 +114,18 @@ position_data <- read_csv('positions.csv') %>%
   nest(data = c(-id, -section))
 ```
 
-
-
-<style>
-.blocks {
-  break-inside: avoid;
+```{r}
+# When in export mode the little dots are unaligned, so fix that. 
+if(PDF_EXPORT){
+  cat("
+  <style>
+  :root{
+    --decorator-outer-offset-left: -6.5px;
+  }
+  </style>")
 }
-</style>
+```
+
 
 Aside
 ================================================================================
@@ -128,7 +133,12 @@ Aside
 
 ![logo](beta_dist.png){width=100%}
 
-View this CV online with links at _nickstrayer.me/cv_
+```{r}
+# When in export mode the little dots are unaligned, so fix that. 
+if(PDF_EXPORT){
+  cat("View this CV online with links at _nickstrayer.me/cv_")
+}
+```
 
 Contact {#contact}
 --------------------------------------------------------------------------------
@@ -212,13 +222,22 @@ print_section(position_data, 'research_positions')
 Industry Experience {data-icon=suitcase}
 --------------------------------------------------------------------------------
 
+::: aside
+I have worked in a variety of roles ranging from journalist to software engineer to data scientist. I like collaborative environments where I can learn from my peers. 
+:::
+
 ```{r}
 print_section(position_data, 'industry_positions')
 ```
 
+<br>
 
 Teaching Experience {data-icon=chalkboard-teacher}
 --------------------------------------------------------------------------------
+
+::: aside
+I am passionate about education. I believe that no topic is too complex if the teacher is empathetic and willing to think about new methods of approaching task. 
+:::
 
 ```{r}
 print_section(position_data, 'teaching_positions')
@@ -228,6 +247,10 @@ print_section(position_data, 'teaching_positions')
 Selected Data Science Writing {data-icon=chart-line}
 --------------------------------------------------------------------------------
 
+
+::: aside
+I regularly blog about data science and visualization on my blog [LiveFreeOrDichotomize.](https://livefreeordichotomize.com/)
+:::
 
 ```{r}
 print_section(position_data, 'data_science_writings')
@@ -257,22 +280,29 @@ Selected Publications, Posters, and Talks {data-icon=book}
 --------------------------------------------------------------------------------
 
 
-::: aside
-I regularly blog about data science and visualization on my blog [LiveFreeOrDichotomize.](https://livefreeordichotomize.com/)
-:::
 
 ```{r}
 print_section(position_data, 'academic_articles')
 ```
 
+
+
+```{r}
+if(PDF_EXPORT){
+  cat("
+  
 Links {data-icon=link}
 --------------------------------------------------------------------------------
 
 <br>
 
-```{r}
-walk2(links, 1:length(links), function(link, index){
-  print(glue('{index}. {link}'))
-})
+
+")
+  
+  walk2(links, 1:length(links), function(link, index){
+    print(glue('{index}. {link}'))
+  })
+}
 ```
+
 
