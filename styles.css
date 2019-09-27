@@ -13,6 +13,11 @@ h1, h2, h3{
   color: #000;
 }
 
+sup{
+  font-size: 0.45rem;
+  font-style: italic;
+}
+
 
 @page{
   size: letter portrait;
@@ -76,7 +81,7 @@ h1, h2, h3{
 
 /* This icon isn't centered by default which is lame */ 
 .fa-laptop {
-  margin-left: -2px;
+  margin-left: -3px;
 }
 
 
@@ -95,6 +100,28 @@ body{
 h1, h2, h3{
   margin: 0;
 }
+
+#links li {
+  list-style-type: decimal;
+}
+
+#links li::before {
+  display: none;
+}
+
+
+/* Move closer to start and up towards header */
+#skills ul {
+  padding-left: 1rem;
+  margin-top: -0.5rem;
+}
+
+#skills li::before {
+  position: relative;
+  margin-left: -4.25pt;
+  content: '• ';
+}
+
 
 
 #main > h1, #aside > h1, #disclaimer > h2 {
@@ -354,9 +381,11 @@ h1, h2{
   content: '• ';
 }
 
+/*
 .aside li::before {
   content: none;
 }
+*/
 
 .details .concise ul{
   margin: 0 !important;
@@ -402,10 +431,8 @@ h1, h2{
   line-height: 1.2;
 }
 
-#skills ul{
-  margin: 0.05in 0 0.15in;
-  padding: 0;
-}
+
+
 
 #disclaimer{
   position: absolute;
@@ -450,4 +477,9 @@ h1, h2{
     margin: auto;
     width: unset;
   }
+}
+
+
+#links h2::after{ /* Remove decorator line from links section*/
+  display: none;
 }
