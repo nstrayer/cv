@@ -20,29 +20,35 @@ knitr::opts_chunk$set(
 library(glue)
 library(tidyverse)
 
-build_position <- function(pos){
-
-  missing_start <- is.null(pos$start)
-  dates_same <- pos$end == pos$start
+# Takes a single row of dataframe corresponding to a position
+# turns it into markdown, and prints the result to console.
+build_position_from_df <- function(pos_df){
+  
+  missing_start <- is.na(pos_df$start)
+  dates_same <- pos_df$end == pos_df$start
   
   if(any(c(missing_start,dates_same))){
-    timeline <- pos$end
+    timeline <- pos_df$end
   } else {
-    timeline <- glue('{pos$end} - {pos$start}')
+    timeline <- glue('{pos_df$end} - {pos_df$start}')
   }
   
-  institution <- if(is.null(pos$institution)) 'N/A' else pos$institution
+
+  descriptions <- pos_df[str_detect(names(pos_df), 'description')] %>% as.list() %>% as.array()
+  
+  # Make sure we only keep filled in descriptions
+  description_bullets <- paste('-', descriptions[descriptions != 'N/A'], collapse = '\n')
   
   glue(
-"### {pos$title}
+"### {pos_df$title}
 
-{pos$loc}
+{pos_df$loc}
 
-{institution}
+{pos_df$institution}
 
 {timeline}
 
-{paste('-', pos$description, collapse = '\n')}
+{description_bullets}
 
 
 "
@@ -50,421 +56,26 @@ build_position <- function(pos){
 }
 
 
-order_by_end <- function(positions){
-  order_of_positions <- positions %>% map_chr('end') %>% order(decreasing = TRUE)
-  positions[order_of_positions]
+# Takes nested position data and a given section id 
+# and prints all the positions in that section to console
+print_section <- function(position_data, section_id){
+  position_data %>% 
+    filter(section == section_id) %>% 
+    pull(data) %>% 
+    purrr::walk(build_position_from_df)
 }
 
-print_section <- function(section_data){
-  section_data %>% 
-    order_by_end() %>% 
-    purrr::walk(build_position)
+fill_nas <- function(column){
+  ifelse(is.na(column), 'N/A', column)
 }
+# Load csv with position info
+position_data <- read_csv('positions.csv') %>% 
+  mutate_all(fill_nas) %>% 
+  arrange(desc(end)) %>% 
+  mutate(id = 1:n()) %>% 
+  nest(data = c(-id, -section))
 ```
 
-
-
-```{r position_data}
-education <- list(
-  list(
-    loc = "Vanderbilt University",
-    title = "PhD. Candidate, biostatistics",
-    institution = "Nashville, TN",
-    start = 2015,
-    end = 2020,
-    description = c(
-      "Dissertation on Bayesian network models and interactive biomedical visualization platforms",
-      "University Graduate Fellow",
-      "Elected member Graduate Student Council"
-    )
-  ),
-  list(
-    loc = "University of Vermont",
-    title = "B.S., mathematics, statistics",
-    institution = "Burlington, VT",
-    start = 2011,
-    end = 2015,
-    description = c(
-      "Minored in computer science",
-      "Thesis: An agent based model of Diel Vertical Migration patterns of Mysis diluviana"
-    )
-  )
-)
-
-research_positions <- list(
-  list(
-    title = "Research Assistant", 
-    loc = "Adair Laboratory", 
-    institution = "University of Vermont",
-    start = 2012,
-    end = 2013,
-    description = c('Independently analyzed and constructed statistical models for large data sets pertaining to carbon decomposition rates.')
-  ),
-   list(
-    title = "Undergraduate Researcher", 
-    loc = "Bentil Laboratory", 
-    institution = "University of Vermont",
-    start = 2013,
-    end = 2014,
-    description = c('Developed mathematical model to predict the transport of sulfur through the environment with applications in waste cleanup.')
-  ),
-  list(
-    title = "Undergraduate Researcher", 
-    loc = "Rubenstein Ecosystems Science Laboratory", 
-    institution = "University of Vermont",
-    start = 2013,
-    end = 2015,
-    description = c("Analyzed and visualized data for CATOS fish tracking project.",
-"Head of data mining project to establish temporal trends in population densities of Mysis diluviana (Mysis).",
-"Ran project to mathematically model the migration patterns of Mysis (honors thesis project.)")
-  ),
-  list(
-    title = "Human Computer Interaction Researcher", 
-    loc = "LabInTheWild (Reineke Lab)", 
-    institution = "University of Michigan",
-    start = 2015,
-    end = 2015,
-    description = c("Led development and implementation of interactive data visualizations to help users compare themselves to other demographics.")
-  ),
-  list(
-    title = "Graduate Research Assistant", 
-    loc = "TBILab (Yaomin Xu's Lab)", 
-    institution = "Vanderbilt University",
-    start = 2015,
-    end = 2020,
-    description = c("Primarilly working with large EHR and Biobank datasets.",
-"Developing network-based methods to investigate and visualize clinically relevant patterns in data.")
-  ),
-  list(
-    title = "Data Science Researcher", 
-    loc = "Data Science Lab", 
-    institution = "Johns Hopkins University",
-    start = 2017,
-    end = 2018,
-    description = c(
-      "Building R Shiny applications in the contexts of wearables and statistics education.",
-      "Work primarily done in R Shiny and Javascript (node and d3js).")
-  )
-)
-
-industry_positions <- list(
-  list(
-    title = "Software Engineering Intern", 
-    loc = "Conduce", 
-    institution = "Carpinteria, CA",
-    start = 2014,
-    end = 2014,
-    description = c("Incorporated d3.js to the company's main software platform.")
-  ),
-   list(
-    title = "Engineering Intern - User Experience", 
-    loc = "Dealer.com", 
-    institution = "Burlington, VT",
-    start = 2015,
-    end = 2015,
-    description = c("Built internal tool to help analyze and visualize user interaction with backend products.")
-  ),
-  list(
-    title = "Data Science Intern", 
-    loc = "Dealer.com", 
-    institution = "Burlington, VT",
-    start = 2015,
-    end = 2015,
-    description = c("Worked with the product analytics team to help parse and visualize large stores of data to drive business decisions.")
-  ),
-  list(
-    title = "Data Artist In Residence", 
-    loc = "Conduce", 
-    institution = "Carpinteria, CA",
-    start = 2014,
-    end = 2015,
-    description = c("Envisioned, prototyped and implemented visualization framework in the course of one month.",
-                    "Constructed training protocol for bringing third parties up to speed with new protocol.")
-  ),
-  list(
-    title = "Data Journalist - Graphics Department", 
-    loc = "New York Times", 
-    institution = "New York, New York",
-    start = 2016,
-    end = 2016,
-    description = c("Reporter with the graphics desk covering topics in science, politics, and sport.",
-                    "Work primarily done in R, Javascript, and Adobe Illustrator.",
-                    "Had most read and discussed article for entire paper for month of August, 2016.")
-  )
-)
-
-
-teaching_positions <- list(
-  list(
-    title = "Statistical Computing in R", 
-    loc = "Vanderbilt Biostatistics Department", 
-    institution = "Nashville, TN",
-    start = 2017,
-    end = 2017,
-    description = c("TA and lectured",
-"Covered introduction to R language for statistics applications",
-"Graduate level class")
-  ),
-  list(
-    title = "Advanced Statistical Learning and Inference", 
-    loc = "Vanderbilt Biostatistics Department", 
-    institution = "Nashville, TN",
-    start = 2017,
-    end = 2018,
-    description = c("TA and lectured",
-                    "Topics covered from penalized regression to boosted trees and neural networks",
-                    "Highest level course offered in department")
-  ),
-  list(
-    title = "Advanced Statistical Computing", 
-    loc = "Vanderbilt Biostatistics Department", 
-    institution = "Nashville, TN",
-    start = 2018,
-    end = 2018,
-    description = c("TA and lectured",
-                    "Covered modern statistical computing algorithms ",
-                    "4th year PhD level class")
-  ),
-  list(
-    title = "Data Visualization Best Practices", 
-    loc = "DataCamp", 
-    institution = "N/A",
-    start = 2019,
-    end = 2019,
-    description = c(
-      "Designed from bottom up course to teach best practices for scientific visualizations.",
-      "Uses R and ggplot2.",
-      "In top 10% on platform by popularity.")
-  ),
-  list(
-    title = " Improving your visualization in Python", 
-    loc = "DataCamp", 
-    institution = "N/A",
-    start = 2019,
-    end = 2019,
-    description = c(
-      "Designed from bottom up course to teach advanced methods for enhancing visualization.",
-      "Uses python, matplotlib, and seaborn.")
-  )
-)
-
-
-
-about_me_press <- list(
-  list(
-    title = "[Great paper? Swipe right on the new ‘Tinder for preprints’ app](https://www.sciencemag.org/news/2017/06/great-paper-swipe-right-new-tinder-preprints-app)", 
-    loc = "Science", 
-    institution = "N/A",
-    start = 2017,
-    end = 2017,
-    description = c("Story of the app [Papr](jhubiostatistics.shinyapps.io/papr/) made with Jeff Leek and Lucy D’Agostino McGowan.")
-  ),
-  list(
-    title = "[Swipe right for science: Papr app is ‘Tinder for preprints’](https://www.nature.com/news/swipe-right-for-science-papr-app-is-tinder-for-preprints-1.22163)", 
-    loc = "Nature News", 
-    institution = "N/A",
-    start = 2017,
-    end = 2017,
-    description = c("Second press article for app Papr.")
-  ),
-  list(
-    title = "[The Deeper Story in the Data](https://www.uvm.edu/uvmnews/news/deeper-story-data)", 
-    loc = "University of Vermont Quarterly", 
-    institution = "N/A",
-    start = 2016,
-    end = 2016,
-    description = c("Story on my path post graduation and the power of narrative.")
-  )
-)
-
-
-by_me_press <- list(
-  list(
-    title = "[The Great Student Migration](https://www.nytimes.com/interactive/2016/08/26/us/college-student-migration.html?smid=pl-share)", 
-    loc = "The New York Times", 
-    institution = "N/A",
-    start = 2016,
-    end = 2016,
-    description = c("Most shared and discussed article from the New York Times for August 2016.")
-  ),
-  list(
-    title = "[Wildfires are Getting Worse, The New York Times](https://www.nytimes.com/interactive/2016/07/25/us/wildfire-seasons-los-angeles.html)", 
-    loc = "The New York Times", 
-    institution = "N/A",
-    start = 2016,
-    end = 2016,
-    description = c("GIS analysis and modeling of fire patterns and trends","Data in collaboration with NASA and USGS")
-  ),
-  list(
-    title = "[Who’s Speaking at the Democratic National Convention?](https://www.nytimes.com/2016/07/26/upshot/democrats-may-not-be-unified-but-their-convention-speakers-are.html)", 
-    loc = "The New York Times", 
-    institution = "N/A",
-    start = 2016,
-    end = 2016,
-    description = c("Data scraped from CSPAN records to figure out who talked and past conventions.")
-  ),
-  list(
-    title = "[Who’s Speaking at the Republican National Convention?](https://www.nytimes.com/2016/07/19/upshot/whos-not-speaking-how-this-republican-convention-differs.html?smid=pl-share))", 
-    loc = "The New York Times", 
-    institution = "N/A",
-    start = 2016,
-    end = 2016,
-    description = c("Used same data scraping techniques as Who’s Speaking at the Democratic National Convention?")
-  ),
-  list(
-    title = "[A Trail of Terror in Nice, Block by Block](https://www.nytimes.com/interactive/2016/07/14/world/europe/trail-of-terror-france.html)", 
-    loc = "The New York Times", 
-    institution = "N/A",
-    start = 2016,
-    end = 2016,
-    description = c(
-      "Led research effort to put togther story of 2016 terrorist attack in Nice, France in less than 12 hours.", 
-      "Work won Silver medal at Malofiej 2017, and gold at Society of News and Design.")
-  )
-)
-
-academic_articles <- list(
-  list(
-    title = "Asymmetric Linkage Disequilibrium: Tools for Dissecting Multiallelic LD", 
-    loc = "Journal of Human Immunology", 
-    institution = "N/A",
-    start = 2015,
-    end = 2015,
-    description = c("Authored with Richard Single, Vanja Paunic, Mark Albrecht, and Martin Maiers.")
-  ),
-  list(
-    title = "[An Agent Based Model of Mysis Migration](https://www.semanticscholar.org/paper/An-Agent-Based-Model-of-the-Diel-Vertical-Migration-Strayer-Stockwell/40493c78e8ecf22bd882d17ec99fd913ec4b9820)", 
-    loc = "International Association of Great Lakes Research Conference", 
-    institution = "N/A",
-    start = 2015,
-    end = 2015,
-    description = c("Authored with Brian O'Malley, Sture Hansson, and Jason Stockwell.")
-  ),
-  list(
-    title = "Declines of Mysis diluviana in the Great Lakes", 
-    loc = "Journal of Great Lakes Research", 
-    institution = "N/A",
-    start = 2015,
-    end = 2015,
-    description = c("Authored with Peter Euclide and Jason Stockwell.")
-  ),
-  list(
-    title = "[Continuous Classification using Deep Neural Networks](nickstrayer.me/qualifying_exam/)", 
-    loc = "Vanderbilt Biostatistics Qualification Exam", 
-    institution = "N/A",
-    start = 2017,
-    end = 2017,
-    description = c("Review of methods for classifying continuous data streams using neural networks",
-                    "Sucessfully met qualifying examination standards")
-  ),
-  list(
-    title = "[Charge Reductions Associated with Shortening Time to Recovery in Septic Shock](https://www.ncbi.nlm.nih.gov/pubmed/30419234)", 
-    loc = "Chest", 
-    institution = "N/A",
-    start = 2019,
-    end = 2019,
-    description = c("Authored with Wesley H. Self, MD MPH; Dandan Liu, PhD; Stephan Russ, MD, MPH; Michael J. Ward, MD, PhD, MBA; Nathan I. Shapiro, MD, MPH; Todd W. Rice, MD, MSc; Matthew W. Semler, MD, MSc.")
-  ),
-  list(
-    title = "R timelineViz: Visualizing the distribution of study events in longitudinal studies", 
-    loc = "Under-Review (copy available upon request.)", 
-    institution = "N/A",
-    start = 2018,
-    end = 2018,
-    description = c("Authored with Alex Sunderman of the Vanderbilt Department of Epidemiology.")
-  ),
-  list(
-    title = "[Multimorbidity Explorer | A shiny app for exploring EHR and biobank data](http://nickstrayer.me/rstudioconf19_me-poster/)", 
-    loc = "RStudio::conf 2019", 
-    institution = "N/A",
-    start = 2019,
-    end = 2019,
-    description = c("Contributed Poster. Authored with Yaomin Xu.")
-  ),
-  list(
-    title = "[Taking a network view of EHR and Biobank data to find explainable multivariate patterns](http://nickstrayer.me/biostat_seminar/)",
-    loc = "Vanderbilt Biostatistics Seminar Series", 
-    institution = "N/A",
-    start = 2019,
-    end = 2019,
-    description = c("University wide seminar series.")
-  ),
-  list(
-    title = "Patient-specific risk factors independently influence survival in Myelodysplastic Syndromes in an unbiased review of EHR records",
-    loc = "Under-Review (copy available upon request.)", 
-    end = 2019,
-    description = c(
-      "Bayesian network analysis used to find novel subgroups of patients with Myelodysplastic Syndromes (MDS).",
-      "Analysis done using method built for my dissertation.")
-  ),
-  list(
-    title = "Patient specific comorbidities impact overall survival in myelofibrosis",
-    loc = "Under-Review (copy available upon request.)", 
-    end = 2019,
-    description = c(
-      "Bayesian network analysis used to find robust novel subgroups of patients with given genetic mutations.",
-      "Analysis done using method built for my dissertation.")
-  )
-)
-
-data_science_writings <- list(
-  list(
-    title = "[Classifying physical activity from smartphone data](https://blogs.rstudio.com/tensorflow/posts/2018-07-17-activity-detection/)",
-    loc = "RStudio Tensorflow Blog", 
-    end = 2018,
-    description = c(
-      "Walk through of training a convolutional nueral network to acheive state of the art recognition of activities from accelerometer data.",
-      "Contracted article.")
-  ),
-  list(
-    title = "[Using AWK and R to parse 25tb](https://livefreeordichotomize.com/2019/06/04/using_awk_and_r_to_parse_25tb/)",
-    loc = 'LiveFreeOrDichotomize.com',
-    end = 2019,
-    description = c(
-      "Story of parsing large amounts of genomics data.",
-      "Provided advice for dealing with data much larger than disk.",
-      "Reached top of HackerNews."
-    )
-  ),
-   list(
-    title = "[The United States of Seasons](https://livefreeordichotomize.com/2018/02/12/the-united-states-of-seasons/)",
-    loc = 'LiveFreeOrDichotomize.com',
-    end = 2018,
-    description = c(
-      "GIS analysis of weather data to find the most 'seasonal' locations in United States",
-      "Used bayesian regression methods for smoothing sparse geospatial data."
-    )
-  ),
-  list(
-    title = "[A year as told by fitbit](https://livefreeordichotomize.com/2017/12/27/a-year-as-told-by-fitbit/)",
-    loc = 'LiveFreeOrDichotomize.com',
-    end = 2017,
-    description = c(
-      "Analysing a full years worth of second-level heart rate data from wearable device.",
-      "Demonstrated visualization-based inference for large data."
-    )
-  ),
-  list(
-    title = "[MCMC and the case of the spilled seeds](https://livefreeordichotomize.com/2017/10/14/mcmc-and-the-case-of-the-spilled-seeds/)",
-    loc = 'LiveFreeOrDichotomize.com',
-    end = 2017,
-    description = c(
-      "Full bayesian MCMC sampler running in your browser.",
-      "Coded from scratch in vanilla Javascript."
-    )
-  ),
-  list(
-    title = "[The traveling metallurgist](https://livefreeordichotomize.com/2017/09/25/the-traveling-metallurgist/)",
-    loc = 'LiveFreeOrDichotomize.com',
-    end = 2017,
-    description = c(
-      "Pure javascript implementation of traveling salesman solution using simulated annealing.",
-      "Allows reader to customize the number and location of cities to attempt to trick the algorithm."
-    )
-  )
-)
-
-```
 
 
 <style>
@@ -492,7 +103,6 @@ Contact {#contact}
 
 Skills {#skills}
 --------------------------------------------------------------------------------
-
 
 
 - Highly experienced in
@@ -533,7 +143,7 @@ Education {data-icon=graduation-cap data-concise=true}
 --------------------------------------------------------------------------------
 
 ```{r, results='asis', echo = FALSE}
-education %>% print_section()
+print_section(position_data, 'education')
 ```
 
 
@@ -542,7 +152,7 @@ Research Experience {data-icon=laptop}
 --------------------------------------------------------------------------------
 
 ```{r, results='asis', echo = FALSE}
-research_positions %>% print_section()
+print_section(position_data, 'research_positions')
 ```
 
 
@@ -551,7 +161,7 @@ Industry Experience {data-icon=suitcase}
 --------------------------------------------------------------------------------
 
 ```{r}
-industry_positions %>% print_section()
+print_section(position_data, 'industry_positions')
 ```
 
 
@@ -559,7 +169,7 @@ Teaching Experience {data-icon=chalkboard-teacher}
 --------------------------------------------------------------------------------
 
 ```{r}
-teaching_positions %>% print_section()
+print_section(position_data, 'teaching_positions')
 ```
 
 
@@ -568,7 +178,7 @@ Selected Data Science Writing {data-icon=chart-line}
 
 
 ```{r}
-data_science_writings %>% print_section()
+print_section(position_data, 'data_science_writings')
 ```
 
 
@@ -577,7 +187,7 @@ Selected Press (About)  {data-icon=newspaper}
 --------------------------------------------------------------------------------
 
 ```{r}
-about_me_press %>% print_section()
+print_section(position_data, 'about_me_press')
 ```
 
 
@@ -585,7 +195,7 @@ Selected Press (By)  {data-icon=newspaper}
 --------------------------------------------------------------------------------
 
 ```{r}
-by_me_press %>% print_section()
+print_section(position_data, 'by_me_press')
 ```
 
 
@@ -600,7 +210,7 @@ I regularly blog about data science and visualization on my blog [LiveFreeOrDich
 :::
 
 ```{r}
-academic_articles %>% print_section()
+print_section(position_data, 'academic_articles')
 ```
 
 
