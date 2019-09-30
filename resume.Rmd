@@ -4,9 +4,9 @@ author: Nick Strayer
 date: "`r Sys.Date()`"
 output:
   pagedown::html_resume:
-    css: ['styles.css']
+    css: ['custom_resume.css', 'styles.css', 'resume']
     # set it to true for a self-contained HTML page but it'll take longer to render
-    self_contained: true
+    self_contained: false
 
 ---
 
@@ -32,9 +32,6 @@ source('parsing_functions.R')
 # Resume items
 position_data <- read_csv('positions.csv') %>% 
   filter(in_resume) %>% 
-  select(-in_resume) %>% 
-  mutate_all(fill_nas) %>% 
-  arrange(desc(end)) %>% 
   mutate(
     id = 1:n(),
     # Build some custom sections by collapsing others
@@ -43,11 +40,7 @@ position_data <- read_csv('positions.csv') %>%
       section %in% c('data_science_writings', 'by_me_press') ~ 'writings',
       TRUE ~ section
     )
-  ) %>% 
-  nest(data = c(-id, -section)) %>% 
-  mutate()
-
-
+  ) 
 
 ```
 
@@ -56,8 +49,11 @@ Aside
 ================================================================================
 
 
+![logo](beta_dist.png){width=100%}
+
 Contact {#contact}
 --------------------------------------------------------------------------------
+
 
 
 - <i class="fa fa-envelope"></i> nick.strayer@gmail.com
@@ -77,7 +73,7 @@ Highly experienced in
 
 - R 
 - Python
-- Javascript
+- Javascript (d3.js)
 
 Experience with
 
@@ -88,12 +84,29 @@ Experience with
 - AWK
 
 
+Open Source Contributions {#open-source}
+--------------------------------------------------------------------------------
+
+All projects available at `github.com/nstrayer/<name>`
+
+
+- `shinysense`: R package to use sensor data in Shiny apps
+- `tuftesque`: Hugo theme (behind LiveFreeOrDichotomize.com)
+- `slid3r`: D3 add-on for fully svg slider inputs
+
+
+More info {#more-info}
+--------------------------------------------------------------------------------
+
+See full CV at nickstrayer.me/cv for more complete list of positions and publications.
+
+
 Disclaimer {#disclaimer}
 --------------------------------------------------------------------------------
 
-Made with the R package [**pagedown**](https://github.com/rstudio/pagedown). 
+Made w/ [**pagedown**](https://github.com/rstudio/pagedown). 
 
-The source code is available at [github.com/nstrayer/cv](https://github.com/nstrayer/cv).
+Source code: [github.com/nstrayer/cv](https://github.com/nstrayer/cv).
 
 Last updated on `r Sys.Date()`.
 
@@ -112,6 +125,7 @@ intro_text <- "I have made [visualizations viewed by hundreds of thousands of pe
 Currently searching for a data science position that allows me build tools using visualization and machine learning to help people explore and understand their data. 
 "
 
+
 cat(sanitize_links(intro_text))
 ```
 
@@ -126,10 +140,19 @@ print_section(position_data, 'education')
 
 
 
-Positions Held {data-icon=suitcase}
+Selected Positions {data-icon=suitcase}
 --------------------------------------------------------------------------------
 
 ```{r}
 position_data %>% print_section('positions')
 ```
+
+Selected Writing {data-icon=suitcase}
+--------------------------------------------------------------------------------
+
+
+```{r}
+position_data %>% print_section('writings')
+```
+
 

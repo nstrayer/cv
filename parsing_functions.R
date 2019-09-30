@@ -75,6 +75,10 @@ build_position_from_df <- function(pos_df){
 print_section <- function(position_data, section_id){
   position_data %>% 
     filter(section == section_id) %>% 
+    mutate(id = 1:n()) %>% 
+    mutate_all(fill_nas) %>% 
+    arrange(desc(end)) %>% 
+    nest(data = c(-id, -section)) %>% 
     pull(data) %>% 
     purrr::walk(build_position_from_df)
 }

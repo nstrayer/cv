@@ -61,17 +61,16 @@ sup {
 }
 
 /* Dont put the little fake list point in front of links */
-#links li::before {
+.aside li::before {
   display: none;
 }
 
 /* Move closer to start and up towards header */
-#skills ul {
+.aside ul {
   padding-left: 1rem;
-  margin-top: -0.5rem;
 }
 
-#skills li::before {
+.aside li::before {
   position: relative;
   margin-left: -4.25pt;
   content: "• ";
@@ -80,6 +79,7 @@ sup {
 /* Make sure elements in asside are centered and have a nice small text */
 .aside {
   width: calc(var(--sidebar-width) + 9px);
+  line-height: 1.2;
   font-size: 0.75rem;
 }
 
@@ -91,10 +91,5 @@ sup {
 /* Remove the fake bullets from lists */
 .aside li::before {
   content: auto;
-}
-
-/* Let the skills be a bit more compressed */
-#skills {
-  line-height: 1.2;
 }
 
