@@ -27,11 +27,7 @@ links <- c()
 source('parsing_functions.R')
 
 # Load csv with position info
-position_data <- read_csv('positions.csv') %>% 
-  mutate_all(fill_nas) %>% 
-  arrange(desc(end)) %>% 
-  mutate(id = 1:n()) %>% 
-  nest(data = c(-id, -section))
+position_data <- read_csv('positions.csv')
 ```
 
 
@@ -152,6 +148,8 @@ print_section(position_data, 'industry_positions')
 ```
 
 <br>
+<br>
+<br>
 
 Teaching Experience {data-icon=chalkboard-teacher}
 --------------------------------------------------------------------------------
@@ -200,8 +198,6 @@ print_section(position_data, 'by_me_press')
 
 Selected Publications, Posters, and Talks {data-icon=book}
 --------------------------------------------------------------------------------
-
-
 
 ```{r}
 print_section(position_data, 'academic_articles')
