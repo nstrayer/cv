@@ -4,7 +4,7 @@ author: Nick Strayer
 date: "`r Sys.Date()`"
 output:
   pagedown::html_resume:
-    css: ['styles.css']
+    css: ['styles.css', 'resume']
     # set it to true for a self-contained HTML page but it'll take longer to render
     self_contained: true
 ---
@@ -24,87 +24,7 @@ PDF_EXPORT <- FALSE
 # Holds all the links that were inserted for placement at the end
 links <- c()
 
-find_link <- regex("
-  \\[   # Grab opening square bracket
-  .+?   # Find smallest internal text as possible
-  \\]   # Closing square bracket
-  \\(   # Opening parenthesis
-  .+?   # Link text, again as small as possible
-  \\)   # Closing parenthesis
-  ",
-  comments = TRUE)
-
-sanitize_links <- function(text){
-  if(PDF_EXPORT){
-    str_extract_all(text, find_link) %>% 
-      pluck(1) %>% 
-      walk(function(link_from_text){
-        title <- link_from_text %>% str_extract('\\[.+\\]') %>% str_remove_all('\\[|\\]') 
-        link <- link_from_text %>% str_extract('\\(.+\\)') %>% str_remove_all('\\(|\\)')
-        
-        # add link to links array
-        links <<- c(links, link)
-        
-        # Build replacement text
-        new_text <- glue('{title}<sup>{length(links)}</sup>')
-        
-        # Replace text
-        text <<- text %>% str_replace(fixed(link_from_text), new_text)
-      })
-  }
-  
-  text
-}
-
-
-# Takes a single row of dataframe corresponding to a position
-# turns it into markdown, and prints the result to console.
-build_position_from_df <- function(pos_df){
-  
-  missing_start <- pos_df$start == 'N/A'
-  dates_same <- pos_df$end == pos_df$start
-  
-  if(any(c(missing_start,dates_same))){
-    timeline <- pos_df$end
-  } else {
-    timeline <- glue('{pos_df$end} - {pos_df$start}')
-  }
-
-  descriptions <- pos_df[str_detect(names(pos_df), 'description')] %>% 
-    as.list() %>% 
-    map_chr(sanitize_links)
-  
-  # Make sure we only keep filled in descriptions
-  description_bullets <- paste('-', descriptions[descriptions != 'N/A'], collapse = '\n')
-  
-  glue(
-"### {sanitize_links(pos_df$title)}
-
-{pos_df$loc}
-
-{pos_df$institution}
-
-{timeline}
-
-{description_bullets}
-
-
-"
-  ) %>% print()
-}
-
-# Takes nested position data and a given section id 
-# and prints all the positions in that section to console
-print_section <- function(position_data, section_id){
-  position_data %>% 
-    filter(section == section_id) %>% 
-    pull(data) %>% 
-    purrr::walk(build_position_from_df)
-}
-
-fill_nas <- function(column){
-  ifelse(is.na(column), 'N/A', column)
-}
+source('parsing_functions.R')
 
 # Load csv with position info
 position_data <- read_csv('positions.csv') %>% 
@@ -113,6 +33,7 @@ position_data <- read_csv('positions.csv') %>%
   mutate(id = 1:n()) %>% 
   nest(data = c(-id, -section))
 ```
+
 
 ```{r}
 # When in export mode the little dots are unaligned, so fix that. 
@@ -190,21 +111,21 @@ Nick Strayer {#title}
 --------------------------------------------------------------------------------
 
 
-```{r, results='asis'}
-intro_text <- "I have made [visualizations viewed by hundreds of thousands of people](https://www.nytimes.com/interactive/2016/08/26/us/college-student-migration.html), [sped up query times for 25 terabytes of data by an average of 4,800 times](https://livefreeordichotomize.com/2019/06/04/using_awk_and_r_to_parse_25tb/), and built [packages for R](https://github.com/nstrayer/shinysense) that let you [do magic](http://nickstrayer.me/dataDayTexas/)."
+```{r}
+intro_text <- "I have made [visualizations viewed by hundreds of thousands of people](https://www.nytimes.com/interactive/2016/08/26/us/college-student-migration.html), [sped up query times for 25 terabytes of data by an average of 4,800 times](https://livefreeordichotomize.com/2019/06/04/using_awk_and_r_to_parse_25tb/), and built [packages for R](https://github.com/nstrayer/shinysense) that let you [do magic](http://nickstrayer.me/dataDayTexas/).
+
+Currently searching for a data science position that allows me build tools using visualization and machine learning to help people explore and understand their data. 
+"
 
 cat(sanitize_links(intro_text))
 ```
-
-
-Currently searching for a data science position that allows me build tools using visualization and machine learning to help people explore and understand their data. 
 
 
 
 Education {data-icon=graduation-cap data-concise=true}
 --------------------------------------------------------------------------------
 
-```{r, results='asis', echo = FALSE}
+```{r}
 print_section(position_data, 'education')
 ```
 
@@ -213,7 +134,7 @@ print_section(position_data, 'education')
 Research Experience {data-icon=laptop}
 --------------------------------------------------------------------------------
 
-```{r, results='asis', echo = FALSE}
+```{r}
 print_section(position_data, 'research_positions')
 ```
 
@@ -264,6 +185,7 @@ Selected Press (About)  {data-icon=newspaper}
 ```{r}
 print_section(position_data, 'about_me_press')
 ```
+
 
 
 Selected Press (By)  {data-icon=newspaper}
