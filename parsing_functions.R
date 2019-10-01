@@ -29,60 +29,59 @@ sanitize_links <- function(text){
         text <<- text %>% str_replace(fixed(link_from_text), new_text)
       })
   }
-  
   text
 }
 
 
-# Takes a single row of dataframe corresponding to a position
-# turns it into markdown, and prints the result to console.
-build_position_from_df <- function(pos_df){
-  
-  missing_start <- pos_df$start == 'N/A'
-  dates_same <- pos_df$end == pos_df$start
-  
-  if(any(c(missing_start,dates_same))){
-    timeline <- pos_df$end
-  } else {
-    timeline <- glue('{pos_df$end} - {pos_df$start}')
-  }
-  
-  descriptions <- pos_df[str_detect(names(pos_df), 'description')] %>% 
-    as.list() %>% 
-    map_chr(sanitize_links)
-  
-  # Make sure we only keep filled in descriptions
-  description_bullets <- paste('-', descriptions[descriptions != 'N/A'], collapse = '\n')
-  
-  glue(
-    "### {sanitize_links(pos_df$title)}
-
-{pos_df$loc}
-
-{pos_df$institution}
-
-{timeline}
-
-{description_bullets}
-
-
-"
-  ) %>% print()
-}
-
-# Takes nested position data and a given section id 
-# and prints all the positions in that section to console
-print_section <- function(position_data, section_id){
-  position_data %>% 
-    filter(section == section_id) %>% 
-    mutate(id = 1:n()) %>% 
-    mutate_all(fill_nas) %>% 
-    arrange(desc(end)) %>% 
-    nest(data = c(-id, -section)) %>% 
-    pull(data) %>% 
-    purrr::walk(build_position_from_df)
-}
-
-fill_nas <- function(column){
-  ifelse(is.na(column), 'N/A', column)
-}
+# # Takes a single row of dataframe corresponding to a position
+# # turns it into markdown, and prints the result to console.
+# build_position_from_df <- function(pos_df){
+#   
+#   missing_start <- pos_df$start == 'N/A'
+#   dates_same <- pos_df$end == pos_df$start
+#   
+#   if(any(c(missing_start,dates_same))){
+#     timeline <- pos_df$end
+#   } else {
+#     timeline <- glue('{pos_df$end} - {pos_df$start}')
+#   }
+#   
+#   descriptions <- pos_df[str_detect(names(pos_df), 'description')] %>% 
+#     as.list() %>% 
+#     map_chr(sanitize_links)
+#   
+#   # Make sure we only keep filled in descriptions
+#   description_bullets <- paste('-', descriptions[descriptions != 'N/A'], collapse = '\n')
+#   
+#   glue(
+#     "### {sanitize_links(pos_df$title)}
+# 
+# {pos_df$loc}
+# 
+# {pos_df$institution}
+# 
+# {timeline}
+# 
+# {description_bullets}
+# 
+# 
+# "
+#   ) %>% print()
+# }
+# 
+# # Takes nested position data and a given section id 
+# # and prints all the positions in that section to console
+# print_section <- function(position_data, section_id){
+#   position_data %>% 
+#     filter(section == section_id) %>% 
+#     mutate(id = 1:n()) %>% 
+#     mutate_all(fill_nas) %>% 
+#     arrange(desc(end)) %>% 
+#     nest(data = c(-id, -section)) %>% 
+#     pull(data) %>% 
+#     purrr::walk(build_position_from_df)
+# }
+# 
+# fill_nas <- function(column){
+#   ifelse(is.na(column), 'N/A', column)
+# }
