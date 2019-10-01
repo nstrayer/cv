@@ -4,7 +4,7 @@ author: Nick Strayer
 date: "`r Sys.Date()`"
 output:
   pagedown::html_resume:
-    css: ['styles.css', 'resume']
+    css: ['css/styles.css', 'resume']
     # set it to true for a self-contained HTML page but it'll take longer to render
     self_contained: true
 ---
@@ -19,7 +19,7 @@ library(glue)
 library(tidyverse)
 
 # Set this to true to have links turned into footnotes at the end of the document
-PDF_EXPORT <- FALSE
+PDF_EXPORT <- TRUE
 
 # Holds all the links that were inserted for placement at the end
 links <- c()
@@ -110,7 +110,7 @@ Nick Strayer {#title}
 ```{r}
 intro_text <- "I have made [visualizations viewed by hundreds of thousands of people](https://www.nytimes.com/interactive/2016/08/26/us/college-student-migration.html), [sped up query times for 25 terabytes of data by an average of 4,800 times](https://livefreeordichotomize.com/2019/06/04/using_awk_and_r_to_parse_25tb/), and built [packages for R](https://github.com/nstrayer/shinysense) that let you [do magic](http://nickstrayer.me/dataDayTexas/).
 
-Currently searching for a data science position that allows me build tools using visualization and machine learning to help people explore and understand their data. 
+Currently searching for a data science position that allows me to build tools using visualization and machine learning to help people explore and understand their data. 
 "
 
 cat(sanitize_links(intro_text))
