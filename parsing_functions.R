@@ -36,11 +36,9 @@ sanitize_links <- function(text){
 # in descending order so links for the same position are
 # right next to eachother in number. 
 strip_links_from_cols <- function(data, cols_to_strip){
-  if(PDF_EXPORT){
-    for(i in 1:nrow(data)){
-      for(col in cols_to_strip){
-        data[i, col] <- sanitize_links(data[i, col])
-      }
+  for(i in 1:nrow(data)){
+    for(col in cols_to_strip){
+      data[i, col] <- sanitize_links(data[i, col])
     }
   }
   data
