@@ -29,60 +29,61 @@ sanitize_links <- function(text){
         text <<- text %>% str_replace(fixed(link_from_text), new_text)
       })
   }
-  
   text
 }
 
-
-# Takes a single row of dataframe corresponding to a position
-# turns it into markdown, and prints the result to console.
-build_position_from_df <- function(pos_df){
-  
-  missing_start <- pos_df$start == 'N/A'
-  dates_same <- pos_df$end == pos_df$start
-  
-  if(any(c(missing_start,dates_same))){
-    timeline <- pos_df$end
-  } else {
-    timeline <- glue('{pos_df$end} - {pos_df$start}')
+# Take entire positions dataframe and removes the links 
+# in descending order so links for the same position are
+# right next to eachother in number. 
+strip_links_from_cols <- function(data, cols_to_strip){
+  for(i in 1:nrow(data)){
+    for(col in cols_to_strip){
+      data[i, col] <- sanitize_links(data[i, col])
+    }
   }
-  
-  descriptions <- pos_df[str_detect(names(pos_df), 'description')] %>% 
-    as.list() %>% 
-    map_chr(sanitize_links)
-  
-  # Make sure we only keep filled in descriptions
-  description_bullets <- paste('-', descriptions[descriptions != 'N/A'], collapse = '\n')
-  
-  glue(
-    "### {sanitize_links(pos_df$title)}
-
-{pos_df$loc}
-
-{pos_df$institution}
-
-{timeline}
-
-{description_bullets}
-
-
-"
-  ) %>% print()
+  data
 }
 
-# Takes nested position data and a given section id 
-# and prints all the positions in that section to console
+# Take a position dataframe and the section id desired
+# and prints the section to markdown. 
 print_section <- function(position_data, section_id){
   position_data %>% 
     filter(section == section_id) %>% 
-    mutate(id = 1:n()) %>% 
-    mutate_all(fill_nas) %>% 
     arrange(desc(end)) %>% 
-    nest(data = c(-id, -section)) %>% 
-    pull(data) %>% 
-    purrr::walk(build_position_from_df)
+    mutate(id = 1:n()) %>% 
+    pivot_longer(
+      starts_with('description'),
+      names_to = 'description_num',
+      values_to = 'description',
+      values_drop_na = TRUE
+    ) %>% 
+    group_by(id) %>% 
+    mutate(
+      descriptions = list(description)
+    ) %>% 
+    ungroup() %>% 
+    filter(description_num == 'description_1') %>% 
+    mutate(
+      timeline = ifelse(
+        is.na(start) | start == end,
+        end,
+        glue('{end} - {start}')
+      ),
+      description_bullets = map_chr(descriptions, ~paste('-', ., collapse = '\n')),
+    ) %>% 
+    strip_links_from_cols(c('title', 'description_bullets')) %>% 
+    mutate_all(~ifelse(is.na(.), 'N/A', .)) %>% 
+    glue_data(
+      "### {title}",
+      "\n\n",
+      "{loc}",
+      "\n\n",
+      "{institution}",
+      "\n\n",
+      "{timeline}", 
+      "\n\n",
+      "{description_bullets}",
+      "\n\n\n",
+    )
 }
 
-fill_nas <- function(column){
-  ifelse(is.na(column), 'N/A', column)
-}

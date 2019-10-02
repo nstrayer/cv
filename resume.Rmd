@@ -33,7 +33,6 @@ source('parsing_functions.R')
 position_data <- read_csv('positions.csv') %>% 
   filter(in_resume) %>% 
   mutate(
-    id = 1:n(),
     # Build some custom sections by collapsing others
     section = case_when(
       section %in% c('research_positions', 'industry_positions') ~ 'positions', 
