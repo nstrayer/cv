@@ -63,24 +63,40 @@ Contact {#contact}
 
 
 
-Skills {#skills}
+Language Skills {#skills}
 --------------------------------------------------------------------------------
 
+```{r}
+out_of <- 5
+skills <- tribble(
+  ~skill,               ~level,
+  "R",                  5,
+  "Javascript (d3.js)", 4.5,
+  "Python",             4,
+  "Bash",               3.5,
+  "SQL",                3,
+  "C++",                3,
+  "AWK",                3
+)
 
-Highly experienced in
+skill_bars_html <- skills %>% 
+  arrange(desc(level)) %>% 
+  mutate(percent_skill = glue("")) %>% 
+  glue_data(
+    "<div class = 'skill-bar'",
+    "style='width:{round(100*level/out_of)}%;'>",
+    "{skill}",
+    "</div>"
+  ) %>% 
+  paste(collapse = "\n")
 
+glue(
+  "<div class = 'skills-holder'>",
+  "{skill_bars_html}",
+  "</div>"
+)
+```
 
-- R 
-- Python
-- Javascript (d3.js)
-
-Experience with
-
-
-- Bash
-- SQL
-- C++
-- AWK
 
 
 Open Source Contributions {#open-source}

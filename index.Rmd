@@ -19,7 +19,7 @@ library(glue)
 library(tidyverse)
 
 # Set this to true to have links turned into footnotes at the end of the document
-PDF_EXPORT <- FALSE
+PDF_EXPORT <- TRUE
 
 # Holds all the links that were inserted for placement at the end
 links <- c()
@@ -71,24 +71,42 @@ Contact {#contact}
 
 
 
-Skills {#skills}
+Language Skills {#skills}
 --------------------------------------------------------------------------------
 
+```{r}
+out_of <- 5
+skills <- tribble(
+  ~skill,               ~level,
+  "R",                  5,
+  "Javascript (d3.js)", 4.5,
+  "Python",             4,
+  "Bash",               3.5,
+  "SQL",                3,
+  "C++",                3,
+  "AWK",                3
+)
 
-Highly experienced in
+skill_bars_html <- skills %>% 
+  arrange(desc(level)) %>% 
+  mutate(percent_skill = glue("")) %>% 
+  glue_data(
+    "<div class = 'skill-bar'",
+    "style='width:{round(100*level/out_of)}%;'>",
+    "{skill}",
+    "</div>"
+  ) %>% 
+  paste(collapse = "\n")
+
+glue(
+  "<div class = 'skills-holder'>",
+  "{skill_bars_html}",
+  "</div>"
+)
+```
 
 
-- R 
-- Python
-- Javascript
 
-Experience with
-
-
-- Bash
-- SQL
-- C++
-- AWK
 
 
 Disclaimer {#disclaimer}
@@ -99,6 +117,7 @@ Made with the R package [**pagedown**](https://github.com/rstudio/pagedown).
 The source code is available at [github.com/nstrayer/cv](https://github.com/nstrayer/cv).
 
 Last updated on `r Sys.Date()`.
+
 
 
 
