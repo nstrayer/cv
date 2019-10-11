@@ -1,12 +1,12 @@
 ---
-title: Nick Strayer's Resume"
-author: Nick Strayer
+title: Scarlett Winter's Resume"
+author: Scarlett Winters
 date: "`r Sys.Date()`"
 output:
   pagedown::html_resume:
     css: ['css/custom_resume.css', 'css/styles.css', 'resume']
     # set it to true for a self-contained HTML page but it'll take longer to render
-    self_contained: true
+    self_contained: false
 
 ---
 
@@ -55,11 +55,10 @@ Contact {#contact}
 
 
 
-- <i class="fa fa-envelope"></i> nick.strayer@gmail.com
-- <i class="fa fa-twitter"></i> NicholasStrayer
-- <i class="fa fa-github"></i> github.com/nstrayer
-- <i class="fa fa-link"></i> [nickstrayer.me](http://nickstrayer.me/)
-- <i class="fa fa-phone"></i> (734) 645-0110
+- <i class="fa fa-envelope"></i> winters.scarlett.e@gmail.com
+- <i class="fa fa-twitter"></i> ScarData
+- <i class="fa fa-github"></i> github.com/scarlett425
+- <i class="fa fa-phone"></i> (312) 805-9540
 
 
 
@@ -70,17 +69,11 @@ Skills {#skills}
 Highly experienced in
 
 
-- R 
-- Python
-- Javascript (d3.js)
-
-Experience with
-
-
-- Bash
 - SQL
-- C++
-- AWK
+- Python
+- Tableau
+- Requirements Analysis
+- Consulting
 
 
 Open Source Contributions {#open-source}
@@ -93,11 +86,7 @@ All projects available at `github.com/nstrayer/<name>`
 - `tuftesque`: Hugo theme (behind LiveFreeOrDichotomize.com)
 - `slid3r`: D3 add-on for fully svg slider inputs
 
-
-More info {#more-info}
 --------------------------------------------------------------------------------
-
-See full CV at nickstrayer.me/cv for more complete list of positions and publications.
 
 
 Disclaimer {#disclaimer}
@@ -115,18 +104,8 @@ Last updated on `r Sys.Date()`.
 Main
 ================================================================================
 
-Nick Strayer {#title}
+Scarlett Winters {#title}
 --------------------------------------------------------------------------------
-
-```{r}
-intro_text <- "I have made [visualizations viewed by hundreds of thousands of people](https://www.nytimes.com/interactive/2016/08/26/us/college-student-migration.html), [sped up query times for 25 terabytes of data by an average of 4,800 times](https://livefreeordichotomize.com/2019/06/04/using_awk_and_r_to_parse_25tb/), and built [packages for R](https://github.com/nstrayer/shinysense) that let you [do magic](http://nickstrayer.me/dataDayTexas/).
-
-Currently searching for a data science position that allows me to build tools using visualization and machine learning to help people explore and understand their data. 
-"
-
-
-cat(sanitize_links(intro_text))
-```
 
 
 
@@ -139,19 +118,19 @@ position_data %>% print_section('education')
 
 
 
-Selected Positions {data-icon=suitcase}
+Academic Achievements & Projects {data-icon=suitcase}
 --------------------------------------------------------------------------------
 
 ```{r}
-position_data %>% print_section('positions')
+position_data %>% print_section('academic_achievements')
 ```
 
-Selected Writing {data-icon=newspaper}
+Positions {data-icon=suitcase}
 --------------------------------------------------------------------------------
 
 
 ```{r}
-position_data %>% print_section('writings')
+position_data %>% print_section('professional_experience')
 ```
 
 
