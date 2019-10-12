@@ -94,9 +94,10 @@ sup {
 }
 
 .skill-bar {
-  background-color: darkgrey;
   color: white;
   padding: 0.1rem 0.25rem;
   margin-top: 3px;
+  position: relative;
+  width: 100%;
 }
 
