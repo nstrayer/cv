@@ -1,5 +1,5 @@
 ---
-title: Scarlett Winter's Resume"
+title: Scarlett Winters' Resume"
 author: Scarlett Winters
 date: "`r Sys.Date()`"
 output:
@@ -10,7 +10,6 @@ output:
 
 ---
 
-
 ```{r, include=FALSE}
 knitr::opts_chunk$set(
   results='asis', 
@@ -18,9 +17,13 @@ knitr::opts_chunk$set(
 )
 library(tidyverse)
 library(glue)
+library(purrr)
+library(tidyr)
+library(pagedown)
+library(latexpdf)
 
 # Set this to true to have links turned into footnotes at the end of the document
-PDF_EXPORT <- FALSE
+PDF_EXPORT <- TRUE
 
 # Holds all the links that were inserted for placement at the end
 links <- c()
@@ -32,23 +35,16 @@ source('parsing_functions.R')
 # Resume items
 position_data <- read_csv('positions.csv') %>% 
   filter(in_resume) %>% 
-  mutate(
-    # Build some custom sections by collapsing others
-    section = case_when(
-      section %in% c('research_positions', 'industry_positions') ~ 'positions', 
-      section %in% c('data_science_writings', 'by_me_press') ~ 'writings',
-      TRUE ~ section
-    )
-  ) 
+  mutate() 
 
 ```
+
+
 
 
 Aside
 ================================================================================
 
-
-![logo](beta_dist.png){width=100%}
 
 Contact {#contact}
 --------------------------------------------------------------------------------
@@ -75,19 +71,7 @@ Highly experienced in
 - Requirements Analysis
 - Consulting
 
-
-Open Source Contributions {#open-source}
 --------------------------------------------------------------------------------
-
-All projects available at `github.com/nstrayer/<name>`
-
-
-- `shinysense`: R package to use sensor data in Shiny apps
-- `tuftesque`: Hugo theme (behind LiveFreeOrDichotomize.com)
-- `slid3r`: D3 add-on for fully svg slider inputs
-
---------------------------------------------------------------------------------
-
 
 Disclaimer {#disclaimer}
 --------------------------------------------------------------------------------
@@ -97,9 +81,6 @@ Made w/ [**pagedown**](https://github.com/rstudio/pagedown).
 Source code: [github.com/nstrayer/cv](https://github.com/nstrayer/cv).
 
 Last updated on `r Sys.Date()`.
-
-
-
 
 Main
 ================================================================================

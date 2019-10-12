@@ -1,12 +1,12 @@
 # Regex to locate links in text
 find_link <- regex("
-  \\[   # Grab opening square bracket
-  .+?   # Find smallest internal text as possible
-  \\]   # Closing square bracket
-  \\(   # Opening parenthesis
-  .+?   # Link text, again as small as possible
-  \\)   # Closing parenthesis
-  ",
+                   \\[   # Grab opening square bracket
+                   .+?   # Find smallest internal text as possible
+                   \\]   # Closing square bracket
+                   \\(   # Opening parenthesis
+                   .+?   # Link text, again as small as possible
+                   \\)   # Closing parenthesis
+                   ",
                    comments = TRUE)
 
 # Function that removes links from text and replaces them with superscripts that are 
@@ -87,3 +87,18 @@ print_section <- function(position_data, section_id){
     )
 }
 
+# Construct a bar chart of skills
+build_skill_bars <- function(skills, out_of = 5){
+  bar_color <- "#969696"
+  bar_background <- "#d9d9d9"
+  skills %>% 
+    mutate(width_percent = round(100*level/out_of)) %>% 
+    glue_data(
+      "<div class = 'skill-bar'",
+      "style = \"background:linear-gradient(to right,",
+      "{bar_color} {width_percent}%,",
+      "{bar_background} {width_percent}% 100%)\" >",
+      "{skill}",
+      "</div>"
+    )
+}
