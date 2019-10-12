@@ -66,8 +66,8 @@ Contact {#contact}
 Language Skills {#skills}
 --------------------------------------------------------------------------------
 
+
 ```{r}
-out_of <- 5
 skills <- tribble(
   ~skill,               ~level,
   "R",                  5,
@@ -79,22 +79,7 @@ skills <- tribble(
   "AWK",                3
 )
 
-skill_bars_html <- skills %>% 
-  arrange(desc(level)) %>% 
-  mutate(percent_skill = glue("")) %>% 
-  glue_data(
-    "<div class = 'skill-bar'",
-    "style='width:{round(100*level/out_of)}%;'>",
-    "{skill}",
-    "</div>"
-  ) %>% 
-  paste(collapse = "\n")
-
-glue(
-  "<div class = 'skills-holder'>",
-  "{skill_bars_html}",
-  "</div>"
-)
+build_skill_bars(skills)
 ```
 
 

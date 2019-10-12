@@ -87,3 +87,15 @@ print_section <- function(position_data, section_id){
     )
 }
 
+# Construct a bar chart of skills
+build_skill_bars <- function(skills, out_of = 5){
+  skills %>% 
+    arrange(desc(level)) %>% 
+    glue_data(
+      "<div class = 'skill-bar'",
+      "style='width:{round(100*level/out_of)}%;'>",
+      "{skill}",
+      "</div>"
+    )
+}
+
