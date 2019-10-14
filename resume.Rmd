@@ -6,8 +6,7 @@ output:
   pagedown::html_resume:
     css: ['css/custom_resume.css', 'css/styles.css', 'resume']
     # set it to true for a self-contained HTML page but it'll take longer to render
-    self_contained: false
-
+    self_contained: true
 ---
 
 ```{r, include=FALSE}
@@ -19,11 +18,9 @@ library(tidyverse)
 library(glue)
 library(purrr)
 library(tidyr)
-library(pagedown)
-library(latexpdf)
 
 # Set this to true to have links turned into footnotes at the end of the document
-PDF_EXPORT <- TRUE
+PDF_EXPORT <- FALSE
 
 # Holds all the links that were inserted for placement at the end
 links <- c()
@@ -34,9 +31,7 @@ source('parsing_functions.R')
 # First let's get the data, filtering to only the items tagged as
 # Resume items
 position_data <- read_csv('positions.csv') %>% 
-  filter(in_resume) %>% 
-  mutate() 
-
+  filter(in_resume) 
 ```
 
 
@@ -78,7 +73,7 @@ Disclaimer {#disclaimer}
 
 Made w/ [**pagedown**](https://github.com/rstudio/pagedown). 
 
-Source code: [github.com/nstrayer/cv](https://github.com/nstrayer/cv).
+Source code: [github.com/nstrayer/cv](https://github.com/scarlett425/cv).
 
 Last updated on `r Sys.Date()`.
 
