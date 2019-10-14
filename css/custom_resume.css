@@ -22,7 +22,7 @@
 
 /* Customize some of the sizing variables */
 :root {
-  --sidebar-width: 12rem !important; /* Shrink sidebar width  */
+  --sidebar-width: 13rem !important; /* Shrink sidebar width  */
   --sidebar-horizontal-padding: 0.02in; /* Reduce sidebar padding */
 }
 
