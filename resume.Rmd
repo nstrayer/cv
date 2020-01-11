@@ -19,10 +19,10 @@ library(tidyverse)
 library(glue)
 
 # Set this to true to have links turned into footnotes at the end of the document
-PDF_EXPORT <- FALSE
+PDF_EXPORT <- TRUE
 
 # Holds all the links that were inserted for placement at the end
-links <- c()
+links <- c("https://twitter.com/conormjhiggins","https://github.com/conormjhiggins")
 
 source('parsing_functions.R')
 
