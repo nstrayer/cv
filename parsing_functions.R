@@ -81,9 +81,9 @@ print_section <- function(position_data, section_id){
     glue_data(
       "### {title}",
       "\n\n",
-      "{loc}",
-      "\n\n",
       "{institution}",
+      "\n\n",
+      "{loc}",
       "\n\n",
       "{timeline}", 
       "\n\n",

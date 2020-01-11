@@ -1,6 +1,6 @@
 ---
-title: Nick Strayer's Resume"
-author: Nick Strayer
+title: Conor Higgins' Resume"
+author: Conor Higgins
 date: "`r Sys.Date()`"
 output:
   pagedown::html_resume:
@@ -47,56 +47,57 @@ Aside
 ================================================================================
 
 
-![logo](beta_dist.png){width=100%}
+
 
 Contact {#contact}
 --------------------------------------------------------------------------------
 
 
 
-- <i class="fa fa-envelope"></i> nick.strayer@gmail.com
-- <i class="fa fa-twitter"></i> NicholasStrayer
-- <i class="fa fa-github"></i> github.com/nstrayer
-- <i class="fa fa-link"></i> [nickstrayer.me](http://nickstrayer.me/)
-- <i class="fa fa-phone"></i> (734) 645-0110
+- <i class="fa fa-envelope"></i> conormjhiggins@gmail.com
+- <i class="fa fa-twitter"></i> [conormjhiggins](https://twitter.com/conormjhiggins)
+- <i class="fa fa-github"></i> [github.com/conormjhiggins](https://github.com/conormjhiggins)
+- <i class="fa fa-phone"></i> (+44) 7728 434048
 
 
 
-Language Skills {#skills}
+Language & Visualisation Skills {#skills}
 --------------------------------------------------------------------------------
 
+Highly Skilled
 
-```{r}
-skills <- tribble(
-  ~skill,               ~level,
-  "R",                  5,
-  "Javascript (d3.js)", 4.5,
-  "Python",             4,
-  "Bash",               3.5,
-  "SQL",                3,
-  "C++",                3,
-  "AWK",                3
-)
-build_skill_bars(skills)
-```
+- R 
+- LaTeX
+- Microsoft Office (Including Excel, VBA, PowerPoint etc.)
+- SAS
+- Shiny
+- Markdown
 
+Experience With
 
+- Python 3 (Currently learning)
+- HTML
+- Tableau
+- Power BI (Currently learning)
+- Matlab
+- STATA
+- SQL
 
-Open Source Contributions {#open-source}
+Relevant Package Knowledge {#packages}
 --------------------------------------------------------------------------------
-
-All projects available at `github.com/nstrayer/<name>`
-
-
-- `shinysense`: R package to use sensor data in Shiny apps
-- `tuftesque`: Hugo theme (behind LiveFreeOrDichotomize.com)
-- `slid3r`: D3 add-on for fully svg slider inputs
-
-
-More info {#more-info}
---------------------------------------------------------------------------------
-
-See full CV at nickstrayer.me/cv for more complete list of positions and publications.
+- ggplot2
+- tm
+- dplyr
+- caret
+- shiny
+- esquisse
+- lubridate
+- janitor 
+- stringr
+- glue
+- RSQLite
+- plotly
+- etc
 
 
 Disclaimer {#disclaimer}
@@ -104,7 +105,7 @@ Disclaimer {#disclaimer}
 
 Made w/ [**pagedown**](https://github.com/rstudio/pagedown). 
 
-Source code: [github.com/nstrayer/cv](https://github.com/nstrayer/cv).
+Source code: [github.com/conormjhiggins/cv](https://github.com/conormjhiggins/cv).
 
 Last updated on `r Sys.Date()`.
 
@@ -114,15 +115,11 @@ Last updated on `r Sys.Date()`.
 Main
 ================================================================================
 
-Nick Strayer {#title}
+Conor Higgins {#title}
 --------------------------------------------------------------------------------
 
 ```{r}
-intro_text <- "I have made [visualizations viewed by hundreds of thousands of people](https://www.nytimes.com/interactive/2016/08/26/us/college-student-migration.html), [sped up query times for 25 terabytes of data by an average of 4,800 times](https://livefreeordichotomize.com/2019/06/04/using_awk_and_r_to_parse_25tb/), and built [packages for R](https://github.com/nstrayer/shinysense) that let you [do magic](http://nickstrayer.me/dataDayTexas/).
-
-Currently searching for a data science position that allows me to build tools using visualization and machine learning to help people explore and understand their data. 
-"
-
+intro_text <- "I am a recent graduate of Lancaster University, looking to further my short career within the Data Science/Statistics field. I believe that I am an outstanding communicator and leader with high levels of determination and motivation. Excellent ability to bring enthusiasm, focus, and a positive demeanor to the workplace. Flexible, dependable, and eager to work both independently as well as in a team towards aims and goal. I am a confident public speaker and consider myself people person as I have led and participated within teams throughout my entire life. I believe that I am a great problem solver and would be a valuable asset to any team."
 
 cat(sanitize_links(intro_text))
 ```
@@ -138,19 +135,15 @@ position_data %>% print_section('education')
 
 
 
-Selected Positions {data-icon=suitcase}
+Experience {data-icon=suitcase}
 --------------------------------------------------------------------------------
 
 ```{r}
 position_data %>% print_section('positions')
 ```
 
-Selected Writing {data-icon=newspaper}
+
+Interests & Other {data-icon=user}
 --------------------------------------------------------------------------------
 
-
-```{r}
-position_data %>% print_section('writings')
-```
-
-
+Alongside my experience I am also a keen learner of multiple fields, and try to partake in multiple hobbies. To help my statistical experience I take part in [TidyTuesday](https://github.com/rfordatascience/tidytuesday) weekly. I am also an avid snooker and football player at an amateur level, of which I have captained both of my teams adding to my leadership experience throughout my life. The love of football also fuels my drive to perform analytics on the sport, whilst also pursuing coaching badges.
