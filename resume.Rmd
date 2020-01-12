@@ -77,6 +77,7 @@ Experience With
 
 - Python 3 (Currently learning)
 - HTML
+- CSS
 - Tableau
 - Power BI (Currently learning)
 - Matlab
@@ -97,10 +98,11 @@ Relevant Package Knowledge {#packages}
 - glue
 - RSQLite
 - plotly
+- golem
 - etc
 
 
-Disclaimer {#disclaimer}
+More Info {#more-info}
 --------------------------------------------------------------------------------
 
 Made w/ [**pagedown**](https://github.com/rstudio/pagedown). 
@@ -119,7 +121,7 @@ Conor Higgins {#title}
 --------------------------------------------------------------------------------
 
 ```{r}
-intro_text <- "I am a recent graduate of Lancaster University, looking to further my short career within the Data Science/Statistics field. I believe that I am an outstanding communicator and leader with high levels of determination and motivation. Excellent ability to bring enthusiasm, focus, and a positive demeanor to the workplace. Flexible, dependable, and eager to work both independently as well as in a team towards aims and goal. I am a confident public speaker and consider myself people person as I have led and participated within teams throughout my entire life. I believe that I am a great problem solver and would be a valuable asset to any team."
+intro_text <- "I am a recent graduate of Lancaster University, looking to further my career within Data Science and Statistics. I am an outstanding communicator and leader with high levels of determination and motivation. Excellent ability to bring enthusiasm, focus, and a positive demeanor to the workplace. Flexible, dependable, and eager to work both independently as well as in a team towards goals. I am a confident public speaker and collaborator, as evidenced by my participation in and leadership of many teams through both my extra-curricular and work experiences. I am a problem solver and I am confident I would be a valuable asset to any team."
 
 cat(sanitize_links(intro_text))
 ```
@@ -146,4 +148,6 @@ position_data %>% print_section('positions')
 Interests & Other {data-icon=user}
 --------------------------------------------------------------------------------
 
-Alongside my experience I am also a keen learner of multiple fields, and try to partake in multiple hobbies. To help my statistical experience I take part in [TidyTuesday](https://github.com/rfordatascience/tidytuesday) weekly. I am also an avid snooker and football player at an amateur level, of which I have captained both of my teams adding to my leadership experience throughout my life. The love of football also fuels my drive to perform analytics on the sport, whilst also pursuing coaching badges.
+I pride myself in taking my passion for data science and statistics outside of my role at work and my time in academia into my personal life. I am a keen learner and i am constantly researching and exploring multiple fields to innovate the way i operate. I take part in [TidyTuesday](https://github.com/rfordatascience/tidytuesday) weekly and i am currently learning to improve my Python and Power BI skills.
+
+Aside from my interest in statistics, i am an avid sportsman. I ahve captained teams for both snooker and football throughout my entire life, and i am currently in pursuit of football coaching badges. My deep interest of football has driven me to explore it from a statistical point of view and perform analytics on data wherever possible.
