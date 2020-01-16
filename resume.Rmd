@@ -148,6 +148,6 @@ position_data %>% print_section('positions')
 Interests & Other {data-icon=user}
 --------------------------------------------------------------------------------
 
-I pride myself in taking my passion for data science and statistics outside of my role at work and my time in academia into my personal life. I am a keen learner and i am constantly researching and exploring multiple fields to innovate the way i operate. I take part in [TidyTuesday](https://github.com/rfordatascience/tidytuesday) weekly and i am currently learning to improve my Python and Power BI skills.
+I pride myself in taking my passion for data science and statistics outside of my role at work and my time in academia into my personal life. I am a keen learner and I am constantly researching and exploring multiple fields to innovate the way I operate. I take part in [TidyTuesday](https://github.com/rfordatascience/tidytuesday) weekly and I am currently learning to improve my Python and Power BI skills.
 
-Aside from my interest in statistics, i am an avid sportsman. I ahve captained teams for both snooker and football throughout my entire life, and i am currently in pursuit of football coaching badges. My deep interest of football has driven me to explore it from a statistical point of view and perform analytics on data wherever possible.
+Aside from my interest in statistics, I am an avid sportsman. I have captained teams for both snooker and football throughout my entire life, and I am currently in pursuit of football coaching badges. My deep interest of football has driven me to explore it from a statistical point of view and perform analytics on data wherever possible.
