@@ -18,18 +18,45 @@ knitr::opts_chunk$set(
 library(tidyverse)
 library(glue)
 
-# Set this to true to have links turned into footnotes at the end of the document
+# ======================================================================
+# These variables determine how the the data is loaded and how the exports are
+# done.
+
+# Is data stored in google sheets? If no data will be gather from the csvs/
+# folder in project
+using_googlesheets <- TRUE
+
+# Just the copied URL from the sheet
+positions_sheet_loc <- "https://docs.google.com/spreadsheets/d/14MQICF2F8-vf8CKPF1m4lyGKO6_thG-4aSwat1e2TWc"
+
+# Is this sheet available for anyone to read? If you're using a private sheet
+# set this to false and go to gather_data.R and run the data loading manually
+# once to cache authentication
+sheet_is_publicly_readable <- TRUE
+
+# Is the goal of this knit to build a document that is exported to PDF? If so
+# set this to true to have links turned into footnotes at the end of the
+# document
 PDF_EXPORT <- FALSE
 
-# Holds all the links that were inserted for placement at the end
+
+# A global (gasp) variable that holds all the links that were inserted for
+# placement at the end
 links <- c()
 
-source('parsing_functions.R') # Functions for building sections from CSV data
-source('common_variables.R')  # Small variables for non-csv data such as intro text
+# ======================================================================
+# Now we source two external scripts. One contains functions for building the
+# text output and the other loads up our data from either googlesheets or csvs
 
-# First let's get the data, filtering to only the items tagged as
-# Resume items
-position_data <- read_csv('positions.csv') %>% 
+# Functions for building sections from CSV data
+source('parsing_functions.R') 
+
+# Load data for CV/Resume
+source('gather_data.R')
+
+# Now we just need to filter down the position data to include less verbose
+# categories and only the entries we have designated for the resume
+position_data <- position_data %>% 
   filter(in_resume) %>% 
   mutate(
     # Build some custom sections by collapsing others
@@ -39,32 +66,28 @@ position_data <- read_csv('positions.csv') %>%
       TRUE ~ section
     )
   ) 
-
 ```
+
 
 
 Aside
 ================================================================================
 
 
-![logo](beta_dist.png){width=100%}
+![logo](logo.png){width=100%}
 
 Contact {#contact}
 --------------------------------------------------------------------------------
 
-
-
-- <i class="fa fa-envelope"></i> nick.strayer@gmail.com
-- <i class="fa fa-twitter"></i> NicholasStrayer
-- <i class="fa fa-github"></i> github.com/nstrayer
-- <i class="fa fa-link"></i> [nickstrayer.me](http://nickstrayer.me/)
-- <i class="fa fa-phone"></i> (734) 645-0110
+```{r}
+contact_info %>% 
+  glue_data("- <i class='fa fa-{icon}'></i> {contact}")
+```
 
 
 
 Language Skills {#skills}
 --------------------------------------------------------------------------------
-
 
 ```{r}
 build_skill_bars(skills)
@@ -80,7 +103,7 @@ All projects available at `github.com/nstrayer/<name>`
 
 - `shinysense`: R package to use sensor data in Shiny apps
 - `tuftesque`: Hugo theme (behind LiveFreeOrDichotomize.com)
-- `slid3r`: D3 add-on for fully svg slider inputs
+- `sbmR`: R package for fitting stochasitic block models
 
 
 More info {#more-info}
@@ -100,7 +123,6 @@ Last updated on `r Sys.Date()`.
 
 
 
-
 Main
 ================================================================================
 
@@ -108,7 +130,7 @@ Nick Strayer {#title}
 --------------------------------------------------------------------------------
 
 ```{r}
-cat(sanitize_links(intro_text))
+print_text_block(text_blocks, 'intro')
 ```
 
 
@@ -129,9 +151,10 @@ Selected Positions {data-icon=suitcase}
 position_data %>% print_section('positions')
 ```
 
+
+
 Selected Writing {data-icon=newspaper}
 --------------------------------------------------------------------------------
-
 
 ```{r}
 position_data %>% print_section('writings')

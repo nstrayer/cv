@@ -18,58 +18,45 @@ knitr::opts_chunk$set(
 library(glue)
 library(tidyverse)
 
-# Set this to true to have links turned into footnotes at the end of the document
-PDF_EXPORT <- FALSE
+# ======================================================================
+# These variables determine how the the data is loaded and how the exports are
+# done.
 
-# Where will the HTML version of CV be hosted?
-CV_HTML_LOC <- "nickstrayer.me/cv"
-CV_PDF_LOC <- "https://github.com/nstrayer/cv/raw/master/strayer_cv.pdf"
-
-# Holds all the links that are inserted for placement at the end
-links <- c()
-
-# Functions for building sections from CSV data
-source('parsing_functions.R') 
-```
-
-```{r load_data_googlesheets, eval=TRUE, include=FALSE}
-# =================================================================================
-# This code uses google sheets to store the position info
-library(googlesheets4)
+# Is data stored in google sheets? If no data will be gather from the csvs/
+# folder in project
+using_googlesheets <- TRUE
 
 # Just the copied URL from the sheet
 positions_sheet_loc <- "https://docs.google.com/spreadsheets/d/14MQICF2F8-vf8CKPF1m4lyGKO6_thG-4aSwat1e2TWc"
 
+# Is this sheet available for anyone to read? If you're using a private sheet
+# set this to false and go to gather_data.R and run the data loading manually
+# once to cache authentication
 sheet_is_publicly_readable <- TRUE
 
-if(sheet_is_publicly_readable){
-  # This tells google sheets to not try and authenticate. Note that this will only
-  # work if your sheet has sharing set to "anyone with link can view"
-  sheets_deauth()
-} else {
-  # My info is in a public sheet so there's no need to do authentication but if you want
-  # to use a private sheet, then this is the way you need to do it.
-  # designate project-specific cache so we can render Rmd without problems
-  options(gargle_oauth_cache = ".secrets")
-  
-  # Need to run this once before knitting to cache an authentication token
-  # googlesheets4::sheets_auth()
-}
+# Is the goal of this knit to build a document that is exported to PDF? If so
+# set this to true to have links turned into footnotes at the end of the
+# document
+PDF_EXPORT <- TRUE
 
 
-position_data <- read_sheet(positions_sheet_loc, sheet = "positions")
-skills        <- read_sheet(positions_sheet_loc, sheet = "language_skills")
-text_blocks   <- read_sheet(positions_sheet_loc, sheet = "text_blocks")
-contact_info  <- read_sheet(positions_sheet_loc, sheet = "contact_info", skip = 1)
-```
+CV_PDF_LOC <- "https://github.com/nstrayer/cv/raw/master/strayer_cv.pdf"
+CV_HTML_LOC <- "nickstrayer.me/cv/"
 
-```{r load_data_csvs, eval=FALSE, include=FALSE}
-# Want to go oldschool with just a csv?
-# Set eval=TRUE for this chunk and eval=FALSE for the chunk above 
-position_data <- read_csv("csvs/positions.csv")
-skills        <- read_csv("csvs/language_skills.csv")
-text_blocks   <- read_csv("csvs/text_blocks.csv")
-contact_info  <- read_csv("csvs/contact_info.csv", skip = 1)
+
+# A global (gasp) variable that holds all the links that were inserted for
+# placement at the end
+links <- c()
+
+# ======================================================================
+# Now we source two external scripts. One contains functions for building the
+# text output and the other loads up our data from either googlesheets or csvs
+
+# Functions for building sections from CSV data
+source('parsing_functions.R') 
+
+# Load data for CV/Resume
+source('gather_data.R')
 ```
 
 
@@ -91,7 +78,7 @@ Aside
 ================================================================================
 
 
-![logo](beta_dist.png){width=100%}
+![logo](logo.png){width=100%}
 
 ```{r}
 # When in export mode the little dots are unaligned, so fix that. 
