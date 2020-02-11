@@ -108,3 +108,9 @@ build_skill_bars <- function(skills, out_of = 5){
     )
 }
 
+# Prints out from text_blocks spreadsheet blocks of text for the intro and asides. 
+print_text_block <- function(text_blocks, label){
+  filter(text_blocks, loc == label)$text %>%
+    sanitize_links() %>%
+    cat()
+}
