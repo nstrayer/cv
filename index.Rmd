@@ -37,7 +37,7 @@ sheet_is_publicly_readable <- TRUE
 # Is the goal of this knit to build a document that is exported to PDF? If so
 # set this to true to have links turned into footnotes at the end of the
 # document
-PDF_EXPORT <- TRUE
+PDF_EXPORT <- FALSE
 
 
 CV_PDF_LOC <- "https://github.com/nstrayer/cv/raw/master/strayer_cv.pdf"
