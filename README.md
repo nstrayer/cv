@@ -1,5 +1,14 @@
 ## My pagedown rendered CV
 
+__Switch to googlesheets__
+
+As I get older and more crotchety I find it more and more difficult to manually update a CSV. In response to this, I have moved the data-storing mechanism from a plain CSV to google sheets using the wonderful [`googlesheets4` package.](https://googlesheets4.tidyverse.org/index.html) This allows for a much more easy updating system and also makes it easy to store all the other info that didn't feel write to put into a CSV before (like the intro and aside text) right with everything as separate pages/sheets within the main sheet. 
+
+I have attempted to keep the whole thing as easy as possible to understand and modify by using a publically available sheet and preserving the old CSV driven way behind a boolean variable that can be set in the setup chunk. 
+
+
+## Structure
+
 This repo contains the source-code and results of my CV built with the [pagedown package](https://pagedown.rbind.io) and a modified version of the 'resume' template. 
 
 The main files are:
@@ -25,6 +34,6 @@ The main files are:
 
 ## Looking for the old version with just a single CSV?
 
-The [blog post I originally wrote about this process](https://livefreeordichotomize.com/2019/09/04/building_a_data_driven_cv_with_r/) used an older version of this document. I think that the new googlesheets method is easier to maintain and extend, however the old version is alive and well in a seperate branch here. 
+The [blog post I originally wrote about this process](https://livefreeordichotomize.com/2019/09/04/building_a_data_driven_cv_with_r/) used an older version of this document. I think that the new googlesheets method is easier to maintain and extend, however the old version is alive and well [here.](https://github.com/nstrayer/cv/releases/tag/1.0)
 
 
