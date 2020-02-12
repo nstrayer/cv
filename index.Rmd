@@ -246,3 +246,42 @@ Links {data-icon=link}
 ```
 
 
+```{css remove-timeline, echo = FALSE}
+/* Removes the psuedo element on h2 tags for this section */
+.section.no-timeline h2::after {
+  content: none;
+}
+/* Without adding padding the content is all up on the title */
+.section.no-timeline h2 {
+  padding-bottom: 1rem;
+}
+
+/* Arbitrary styles for the reference cards themselves */
+.reference{
+  width: 220px;    
+  float: left;    
+  padding: 0.5rem;
+  margin: 0.5rem;
+  box-shadow: 1px 1px 4px black;
+}
+```
+
+
+References {data-icon=book, class=no-timeline}
+--------------------------------------------------------------------------------
+
+:::reference
+Professor McProfessing
+
+University of all the things
+
+email: blah@gmail.com
+:::
+
+:::reference
+Professor McProfessing
+
+University of all the things
+
+email: blah@gmail.com
+:::
