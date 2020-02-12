@@ -1,0 +1,267 @@
+@page{
+  size: letter portrait;
+  margin: 1in 0.5in 1in 0.25in;
+}
+
+/* Variables to tweak styles */
+* {
+  --text-color: #444;
+  --font: "Open Sans", sans-serif;
+  --header-colors: rgb(8, 8, 8);
+  --main-background-color: white;
+  --sidebar-background-color: #eaf4ff;
+  --timeline-color: orangered;
+  --timeline-pos: 0.5in;
+  --viewer-background-color: #dcdcdc;
+  --viewer-shadow-color: #313131;
+
+  --page-width: 8.5in;
+  --margin-right: 0.5in;
+  --margin-left: 0.25in;
+  --root-font-size: 12pt;
+  --sidebar-width: 15rem;
+  --sidebar-horizontal-padding: 0;
+}
+
+*{
+  box-sizing: border-box;
+}
+
+:root{
+  --decorator-horizontal-margin: 0.2in;
+  --content-width: calc(var(--page-width) - var(--margin-right) - var(--margin-left));
+  --main-width: calc(var(--content-width) - var(--sidebar-width));
+
+  /* XXX: using px for very good precision control */
+  --decorator-outer-offset-top: 10px;
+  --decorator-outer-offset-left: -5.5px;
+  --decorator-border-width: 1px;
+  --decorator-outer-dim: 9px;
+  --decorator-border: 1px solid #ccc;
+
+  --row-blocks-padding-top: 0.5rem;
+  --date-block-width: 0.7in;
+
+  --main-blocks-title-icon-offset-left: calc(-17pt - 0.25 * var(--root-font-size));
+  --viewer-pages-spacing: 12px;
+}
+
+.pagedjs_page {
+  --content-area-height: calc(var(--pagedjs-height) - var(--pagedjs-margin-top) - var(--pagedjs-margin-bottom));
+  --sidebar-background-width: calc(var(--pagedjs-margin-right) + var(--sidebar-width));
+}
+
+@page{
+  background: linear-gradient(to left, var(--sidebar-background-color), var(--sidebar-background-color) var(--sidebar-background-width), var(--main-background-color) var(--sidebar-background-width));
+}
+
+html {
+  font-size: var(--root-font-size);
+}
+
+body{
+  width: var(--content-width);
+  color: var(--text-color);
+  font-family: var(--font);
+  font-weight: 300;
+  line-height: 1.3;
+  hyphens: auto;
+}
+
+h1, h2, h3{
+  margin: 0;
+  color: var(--header-colors);
+}
+
+
+#main{
+  width: var(--main-width);
+  padding: 0 0.25in 0 0.25in;
+  font-size: 0.7rem;
+  float: left;
+}
+
+
+
+
+
+/* Hide the titles for the three big sections */
+#main > h1, #aside > h1, #disclaimer > h2 {
+  display: none;
+}
+
+/* Paged.js viewer */
+
+@media screen {
+  body {
+    background-color: var(--viewer-background-color);
+    margin: 0; /* for mobile */
+    width: calc(var(--pagedjs-width) + 2 * var(--viewer-pages-spacing)); /* for mobile */
+  }
+   .pagedjs_pages {
+    max-width: var(--pagedjs-width);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+  }
+   .pagedjs_page {
+    box-shadow: 0 0 calc(0.66667 * var(--viewer-pages-spacing)) var(--viewer-shadow-color);
+    margin: var(--viewer-pages-spacing) 0;
+  }
+}
+ @media screen and (min-width: 8.5in) {
+  /* not a mobile */
+  body {
+    margin: auto;
+    width: unset;
+  }
+}
+
+
+
+
+#aside{
+  position: relative; /* for disclaimer */
+  height: var(--content-area-height);
+}
+
+.aside{
+  width: calc(var(--sidebar-width) + var(--pagedjs-margin-right)/2);
+  padding: 0.6in var(--sidebar-horizontal-padding);
+  font-size: 0.8rem;
+  float: right;
+  position: absolute;
+  right: 0;
+  border: 1px solid green;
+}
+
+.level2 .aside{
+  right: calc(-100% + var(--sidebar-width)/2 + var(--pagedjs-margin-right)*2)
+}
+
+
+
+/* Broad categories. E.g. Education */
+
+/* Give the category title a bit of space to breath */
+.section.level2 > h2 {
+  padding-bottom: 1rem;
+}
+
+/* Add space between the icon and the title of category */
+.section.level2 > h2 > i {
+  padding-right: 0.5rem;
+}
+
+.section.level2 {
+  position: relative;
+}
+
+/* Add a little arrow pointing up indicating time going forward  */
+.section.level2.main-block::before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  --size: 10px;
+  --side_border: calc(var(--size)/1.5);
+  top: 2rem;
+  left: calc(var(--timeline-pos) - var(--side_border)/2 - 2.5px);
+  border-bottom: var(--size) solid var(--timeline-color);
+  border-left:   var(--side_border)   solid transparent;
+  border-right:  var(--side_border)   solid transparent;
+}
+
+/* A cap to the timeline that is an open circle */
+.section.level2.main-block::after {
+  --size: 10px;
+  content: "";
+  position: absolute;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  border: 2px solid var(--timeline-color);
+  background: white;
+  bottom: 0;
+  left: calc(var(--timeline-pos) - var(--size)/2 - 1px);
+}
+
+/* All the style related to the profile cards */
+
+/* Adds the timeline itself */
+.section.level3::before {
+  content: "";
+  width: 2px;
+  height: 100%;
+  position: absolute;
+  background: var(--timeline-color);
+  left: var(--timeline-pos);
+}
+
+/* The main sections containing a entry */
+.section.level3 {
+  display: grid;
+  grid-template-columns: var(--timeline-pos) 1fr;
+  position: relative;
+  padding-top: 1rem;
+  --pad_around_timeline: 0.75rem;
+}
+
+/* The last entry for each category adds a bit of a buffer on bottom */
+.section.level3:last-child {
+    margin-bottom: 1rem;
+}
+
+.section.level3 .date {
+  grid-column: 1/2;
+  padding-right: var(--pad_around_timeline);
+}
+
+.section.level3 .details {
+  grid-column: 2/2;
+  padding-left: var(--pad_around_timeline);
+}
+
+.section.level3 .details h3 {
+  padding-bottom: 0.4rem;
+}
+
+.section.level3 .details ul {
+  padding-left: 1.2rem;
+}
+
+.details header {
+  position: relative;
+}
+
+.details header > span.location{
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.date > span {
+  display: block;
+  position: relative;
+  line-height: 2rem;
+  text-align: right;
+}
+
+/* Add a little dash between the dates of the dates that are ranges */
+.date > span:nth-child(2)::after {
+  content: "";
+  position: absolute;
+  left: calc(var(--timeline-pos)/2);
+  top: -0.45rem;
+  width: 1.5px;
+  height: 0.8rem;
+  background: var(--text-color);
+}
+
+
+.section.level3 .decorator {
+  display: none;
+}
+
+
+

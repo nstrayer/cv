@@ -4,10 +4,11 @@ author: Nick Strayer
 date: "`r Sys.Date()`"
 output:
   pagedown::html_resume:
-    css: ['css/styles.css', 'resume']
+    css: ['css/styles.css', 'css/cv.css']
     # set it to true for a self-contained HTML page but it'll take longer to render
-    self_contained: true
+    self_contained: false
 ---
+
 
 ```{r, include=FALSE}
 knitr::opts_chunk$set(
@@ -162,10 +163,7 @@ print_text_block(text_blocks, 'industy_experience_aside')
 print_section(position_data, 'industry_positions')
 ```
 
-<!-- These breaks just force a new page so section doesnt get cut off -->
-<br>
-<br>
-<br>
+
 
 Teaching Experience {data-icon=chalkboard-teacher}
 --------------------------------------------------------------------------------
@@ -205,8 +203,6 @@ print_section(position_data, 'about_me_press')
 ```
 
 
-<br>
-<br>
 
 
 Selected Press (By)  {data-icon=newspaper}
