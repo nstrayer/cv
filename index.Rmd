@@ -4,7 +4,7 @@ author: Nick Strayer
 date: "`r Sys.Date()`"
 output:
   pagedown::html_resume:
-    css: ['css/styles.css', 'css/cv.css']
+    css: ['css/cv.css']
     # set it to true for a self-contained HTML page but it'll take longer to render
     self_contained: false
 ---
