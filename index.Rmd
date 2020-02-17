@@ -2,11 +2,21 @@
 title: "Nick Strayer's CV"
 author: Nick Strayer
 date: "`r Sys.Date()`"
+# These variables determine how the the data is loaded and how the exports are
+# done.
 params:
-  # Is the goal of this knit to build a document that is exported to PDF? If so
-  # set this to true to have links turned into footnotes at the end of the
-  # document
+  # Is the goal of this knit to build a document that is exported to PDF? 
+  # If true: links are turned into footnotes at the end of the document
   pdf: true
+  
+  # Just the copied URL from the sheet. If using local csv's instead simply put null or 'csvs'
+  positions_sheet_loc: "https://docs.google.com/spreadsheets/d/14MQICF2F8-vf8CKPF1m4lyGKO6_thG-4aSwat1e2TWc"
+ 
+  # Where will the PDF of this cv be hosted?
+  CV_PDF_LOC: "https://github.com/nstrayer/cv/raw/master/strayer_cv.pdf"
+  
+  # Where will the HTML be hosted?
+  CV_HTML_LOC: "nickstrayer.me/cv/"
 output:
   pagedown::html_resume:
     css: ['css/cv.css']
@@ -25,26 +35,6 @@ library(glue)
 library(tidyverse)
 
 # ======================================================================
-# These variables determine how the the data is loaded and how the exports are
-# done.
-
-# Is data stored in google sheets? If no data will be gather from the csvs/
-# folder in project
-using_googlesheets <- TRUE
-
-# Just the copied URL from the sheet
-positions_sheet_loc <- "https://docs.google.com/spreadsheets/d/14MQICF2F8-vf8CKPF1m4lyGKO6_thG-4aSwat1e2TWc"
-
-# Is this sheet available for anyone to read? If you're using a private sheet
-# set this to false and go to gather_data.R and run the data loading manually
-# once to cache authentication
-sheet_is_publicly_readable <- TRUE
-
-
-CV_PDF_LOC <- "https://github.com/nstrayer/cv/raw/master/strayer_cv.pdf"
-CV_HTML_LOC <- "nickstrayer.me/cv/"
-
-
 # A global (gasp) variable that holds all the links that were inserted for
 # placement at the end
 links <- c()
@@ -56,10 +46,15 @@ links <- c()
 # Functions for building sections from CSV data
 source('parsing_functions.R') 
 
-# Load data for CV/Resume
-source('gather_data.R')
-```
+content_print <- setup_content_printers(pdf_mode = params$pdf)
 
+# Get function to load data for CV/Resume
+source('gather_data.R')
+data <- gather_data(params$positions_sheet_loc, public_sheet = TRUE)
+# public_sheet argument tells function if the sheet available for anyone to read.
+# If you're using a private sheet set this to false and go to gather_data.R 
+# and run data loading manually once to cache authentication token.
+```
 
 
 
@@ -85,9 +80,9 @@ Aside
 ```{r}
 # When in export mode the little dots are unaligned, so fix that. 
 if(params$pdf){
-  glue("View this CV online with links at _{CV_HTML_LOC}_")
+  glue("View this CV online with links at _{params$CV_HTML_LOC}_")
 } else {
-  glue("[<i class='fas fa-download'></i> Download a PDF of this CV]({CV_PDF_LOC})")
+  glue("[<i class='fas fa-download'></i> Download a PDF of this CV]({params$CV_PDF_LOC})")
 }
 ```
 
@@ -95,7 +90,7 @@ Contact {#contact}
 --------------------------------------------------------------------------------
 
 ```{r}
-contact_info %>% 
+data$contact_info %>% 
   glue_data("- <i class='fa fa-{icon}'></i> {contact}")
 ```
 
@@ -105,7 +100,7 @@ Language Skills {#skills}
 --------------------------------------------------------------------------------
 
 ```{r}
-build_skill_bars(skills)
+content_print$skill_bars(data$skills)
 ```
 
 
@@ -128,7 +123,7 @@ Nick Strayer {#title}
 --------------------------------------------------------------------------------
 
 ```{r}
-print_text_block(text_blocks, 'intro')
+content_print$text_block(data$text_blocks, 'intro')
 ```
 
 
@@ -137,7 +132,7 @@ Education {data-icon=graduation-cap data-concise=true}
 --------------------------------------------------------------------------------
 
 ```{r}
-print_section(position_data, 'education')
+content_print$section(data$positions, 'education')
 ```
 
 
@@ -146,7 +141,7 @@ Research Experience {data-icon=laptop}
 --------------------------------------------------------------------------------
 
 ```{r}
-print_section(position_data, 'research_positions')
+content_print$section(data$positions, 'research_positions')
 ```
 
 
@@ -156,12 +151,12 @@ Industry Experience {data-icon=suitcase}
 
 ::: aside
 ```{r}
-print_text_block(text_blocks, 'industy_experience_aside')
+content_print$text_block(data$text_blocks, 'industy_experience_aside')
 ```
 :::
 
 ```{r}
-print_section(position_data, 'industry_positions')
+content_print$section(data$positions, 'industry_positions')
 ```
 
 
@@ -171,12 +166,12 @@ Teaching Experience {data-icon=chalkboard-teacher}
 
 ::: aside
 ```{r}
-print_text_block(text_blocks, 'teaching_experience_aside')
+content_print$text_block(data$text_blocks, 'teaching_experience_aside')
 ```
 :::
 
 ```{r}
-print_section(position_data, 'teaching_positions')
+content_print$section(data$positions, 'teaching_positions')
 ```
 
 
@@ -186,12 +181,12 @@ Selected Data Science Writing {data-icon=chart-line}
 
 ::: aside
 ```{r}
-print_text_block(text_blocks, 'data_science_writing_aside')
+content_print$text_block(data$text_blocks, 'data_science_writing_aside')
 ```
 :::
 
 ```{r}
-print_section(position_data, 'data_science_writings')
+content_print$section(data$positions, 'data_science_writings')
 ```
 
 
@@ -200,7 +195,7 @@ Selected Press (About)  {data-icon=newspaper}
 --------------------------------------------------------------------------------
 
 ```{r}
-print_section(position_data, 'about_me_press')
+content_print$section(data$positions, 'about_me_press')
 ```
 
 
@@ -210,7 +205,7 @@ Selected Press (By)  {data-icon=newspaper}
 --------------------------------------------------------------------------------
 
 ```{r}
-print_section(position_data, 'by_me_press')
+content_print$section(data$positions, 'by_me_press')
 ```
 
 
@@ -219,7 +214,7 @@ Selected Publications, Posters, and Talks {data-icon=book}
 --------------------------------------------------------------------------------
 
 ```{r}
-print_section(position_data, 'academic_articles')
+content_print$section(data$positions, 'academic_articles')
 ```
 
 
