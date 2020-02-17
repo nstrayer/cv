@@ -55,7 +55,7 @@ pretty_link <- function(link) stringr::str_remove(link, "https://|http://")
 
 
 # Get function to load data for CV/Resume
-printer <- new_cv_printer(data, params$pdf)
+printer <- new_cv_printer(data, pdf_mode = params$pdf)
 ```
 
 
@@ -129,99 +129,34 @@ printer %<>% print_text_block('intro')
 
 
 
-Education {data-icon=graduation-cap data-concise=true}
---------------------------------------------------------------------------------
-
 ```{r}
-printer %<>% print_section('education')
+printer %<>% 
+  print_section('education',
+                title = 'Education',
+                icon = 'graduation-cap') %>%
+  print_section('research_positions', 
+                title = 'Research Experience',
+                icon = 'laptop') %>% 
+  print_section('industry_positions', 
+                title = 'Industry Experience',
+                icon = 'suitcase',
+                aside_text = 'industy_experience_aside') %>% 
+  print_section('teaching_positions', 
+                title = 'Teaching Experience',
+                icon = 'chalkboard-teacher',
+                aside_text = 'teaching_experience_aside') %>% 
+  print_section('data_science_writings',
+                title = 'Data Science Writings',
+                icon = 'chart-line',
+                aside_text = 'data_science_writing_aside') %>% 
+  print_section('about_me_press',
+                title = 'Selected Press (About)',
+                icon = 'newspaper') %>% 
+  print_section('by_me_press',
+                title = 'Selected Press (By)',
+                icon = 'book') %>% 
+  print_section('academic_articles',
+                title = 'Selected Publications, Posters, and Talks',
+                icon = 'book') %>% 
+  print_links()
 ```
-
-
-
-Research Experience {data-icon=laptop}
---------------------------------------------------------------------------------
-
-```{r}
-printer %<>% print_section('research_positions')
-```
-
-
-
-Industry Experience {data-icon=suitcase}
---------------------------------------------------------------------------------
-
-::: aside
-```{r}
-printer %<>% print_text_block('industy_experience_aside')
-```
-:::
-
-```{r}
-printer %<>% print_section('industry_positions')
-```
-
-
-
-Teaching Experience {data-icon=chalkboard-teacher}
---------------------------------------------------------------------------------
-
-::: aside
-```{r}
-printer %<>% print_text_block('teaching_experience_aside')
-```
-:::
-
-```{r}
-printer %<>% print_section('teaching_positions')
-```
-
-
-
-Selected Data Science Writing {data-icon=chart-line}
---------------------------------------------------------------------------------
-
-::: aside
-```{r}
-printer %<>% print_text_block('data_science_writing_aside')
-```
-:::
-
-```{r}
-printer %<>% print_section('data_science_writings')
-```
-
-
-
-Selected Press (About)  {data-icon=newspaper}
---------------------------------------------------------------------------------
-
-```{r}
-printer %<>% print_section('about_me_press')
-```
-
-
-
-
-Selected Press (By)  {data-icon=newspaper}
---------------------------------------------------------------------------------
-
-```{r}
-printer %<>% print_section('by_me_press')
-```
-
-
-
-Selected Publications, Posters, and Talks {data-icon=book}
---------------------------------------------------------------------------------
-
-```{r}
-printer %<>% print_section('academic_articles')
-```
-
-
-
-```{r}
-printer %<>% print_links()
-```
-
-
