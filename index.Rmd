@@ -2,6 +2,11 @@
 title: "Nick Strayer's CV"
 author: Nick Strayer
 date: "`r Sys.Date()`"
+params:
+  # Is the goal of this knit to build a document that is exported to PDF? If so
+  # set this to true to have links turned into footnotes at the end of the
+  # document
+  pdf: true
 output:
   pagedown::html_resume:
     css: ['css/cv.css']
@@ -35,11 +40,6 @@ positions_sheet_loc <- "https://docs.google.com/spreadsheets/d/14MQICF2F8-vf8CKP
 # once to cache authentication
 sheet_is_publicly_readable <- TRUE
 
-# Is the goal of this knit to build a document that is exported to PDF? If so
-# set this to true to have links turned into footnotes at the end of the
-# document
-PDF_EXPORT <- FALSE
-
 
 CV_PDF_LOC <- "https://github.com/nstrayer/cv/raw/master/strayer_cv.pdf"
 CV_HTML_LOC <- "nickstrayer.me/cv/"
@@ -62,9 +62,10 @@ source('gather_data.R')
 
 
 
+
 ```{r}
 # When in export mode the little dots are unaligned, so fix that. 
-if(PDF_EXPORT){
+if(params$pdf){
   cat("
   <style>
   :root{
@@ -83,7 +84,7 @@ Aside
 
 ```{r}
 # When in export mode the little dots are unaligned, so fix that. 
-if(PDF_EXPORT){
+if(params$pdf){
   glue("View this CV online with links at _{CV_HTML_LOC}_")
 } else {
   glue("[<i class='fas fa-download'></i> Download a PDF of this CV]({CV_PDF_LOC})")
@@ -224,7 +225,7 @@ print_section(position_data, 'academic_articles')
 
 
 ```{r}
-if(PDF_EXPORT){
+if(params$pdf){
   cat("
   
 Links {data-icon=link}

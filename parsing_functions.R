@@ -12,7 +12,7 @@ find_link <- regex("
 # Function that removes links from text and replaces them with superscripts that are 
 # referenced in an end-of-document list. 
 sanitize_links <- function(text){
-  if(PDF_EXPORT){
+  if(params$pdf){
     str_extract_all(text, find_link) %>% 
       pluck(1) %>% 
       walk(function(link_from_text){
