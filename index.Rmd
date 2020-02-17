@@ -17,6 +17,9 @@ params:
   
   # Where will the HTML be hosted?
   CV_HTML_LOC: "nickstrayer.me/cv/"
+  
+  # Where is this file hosted?
+  SOURCE_LOC: "https://github.com/nstrayer/cv"
 output:
   pagedown::html_resume:
     css: ['css/cv.css']
@@ -33,27 +36,26 @@ knitr::opts_chunk$set(
 
 library(glue)
 library(tidyverse)
+library(magrittr)
+library(cvdown)
 
-# ======================================================================
-# A global (gasp) variable that holds all the links that were inserted for
-# placement at the end
-links <- c()
+# Going old school and want to use csvs instead of google sheets for data? 
+if(params$positions_sheet_loc == "csv"){
+  data <- gather_data_from_csvs(positions_loc    = "csvs/positions.csv",
+                                skills_loc       = "csvs/language_skills.csv",
+                                text_blocks_loc  = "csvs/text_blocks.csv",
+                                contact_info_loc = "csvs/contact_info.csv")
+} else {
+  # Load data for CV from google sheets
+  data <- gather_data_from_googlesheets(params$positions_sheet_loc, public_sheet = TRUE)
+}
 
-# ======================================================================
-# Now we source two external scripts. One contains functions for building the
-# text output and the other loads up our data from either googlesheets or csvs
 
-# Functions for building sections from CSV data
-source('parsing_functions.R') 
+pretty_link <- function(link) stringr::str_remove(link, "https://|http://")
 
-content_print <- setup_content_printers(pdf_mode = params$pdf)
 
 # Get function to load data for CV/Resume
-source('gather_data.R')
-data <- gather_data(params$positions_sheet_loc, public_sheet = TRUE)
-# public_sheet argument tells function if the sheet available for anyone to read.
-# If you're using a private sheet set this to false and go to gather_data.R 
-# and run data loading manually once to cache authentication token.
+printer <- new_cv_printer(data, params$pdf)
 ```
 
 
@@ -78,7 +80,7 @@ Aside
 ![logo](logo.png){width=100%}
 
 ```{r}
-# When in export mode the little dots are unaligned, so fix that. 
+# Let users know where they can go to find CV
 if(params$pdf){
   glue("View this CV online with links at _{params$CV_HTML_LOC}_")
 } else {
@@ -90,8 +92,7 @@ Contact {#contact}
 --------------------------------------------------------------------------------
 
 ```{r}
-data$contact_info %>% 
-  glue_data("- <i class='fa fa-{icon}'></i> {contact}")
+printer %<>% print_contact_info()
 ```
 
 
@@ -100,7 +101,7 @@ Language Skills {#skills}
 --------------------------------------------------------------------------------
 
 ```{r}
-content_print$skill_bars(data$skills)
+printer %<>% print_skill_bars()
 ```
 
 
@@ -110,7 +111,7 @@ Disclaimer {#disclaimer}
 
 Made with the R package [**pagedown**](https://github.com/rstudio/pagedown). 
 
-The source code is available at [github.com/nstrayer/cv](https://github.com/nstrayer/cv).
+The source code is available at [`r pretty_link(params$SOURCE_LOC)`](`r params$SOURCE_LOC`).
 
 Last updated on `r Sys.Date()`.
 
@@ -123,7 +124,7 @@ Nick Strayer {#title}
 --------------------------------------------------------------------------------
 
 ```{r}
-content_print$text_block(data$text_blocks, 'intro')
+printer %<>% print_text_block('intro')
 ```
 
 
@@ -132,7 +133,7 @@ Education {data-icon=graduation-cap data-concise=true}
 --------------------------------------------------------------------------------
 
 ```{r}
-content_print$section(data$positions, 'education')
+printer %<>% print_section('education')
 ```
 
 
@@ -141,7 +142,7 @@ Research Experience {data-icon=laptop}
 --------------------------------------------------------------------------------
 
 ```{r}
-content_print$section(data$positions, 'research_positions')
+printer %<>% print_section('research_positions')
 ```
 
 
@@ -151,12 +152,12 @@ Industry Experience {data-icon=suitcase}
 
 ::: aside
 ```{r}
-content_print$text_block(data$text_blocks, 'industy_experience_aside')
+printer %<>% print_text_block('industy_experience_aside')
 ```
 :::
 
 ```{r}
-content_print$section(data$positions, 'industry_positions')
+printer %<>% print_section('industry_positions')
 ```
 
 
@@ -166,12 +167,12 @@ Teaching Experience {data-icon=chalkboard-teacher}
 
 ::: aside
 ```{r}
-content_print$text_block(data$text_blocks, 'teaching_experience_aside')
+printer %<>% print_text_block('teaching_experience_aside')
 ```
 :::
 
 ```{r}
-content_print$section(data$positions, 'teaching_positions')
+printer %<>% print_section('teaching_positions')
 ```
 
 
@@ -181,12 +182,12 @@ Selected Data Science Writing {data-icon=chart-line}
 
 ::: aside
 ```{r}
-content_print$text_block(data$text_blocks, 'data_science_writing_aside')
+printer %<>% print_text_block('data_science_writing_aside')
 ```
 :::
 
 ```{r}
-content_print$section(data$positions, 'data_science_writings')
+printer %<>% print_section('data_science_writings')
 ```
 
 
@@ -195,7 +196,7 @@ Selected Press (About)  {data-icon=newspaper}
 --------------------------------------------------------------------------------
 
 ```{r}
-content_print$section(data$positions, 'about_me_press')
+printer %<>% print_section('about_me_press')
 ```
 
 
@@ -205,7 +206,7 @@ Selected Press (By)  {data-icon=newspaper}
 --------------------------------------------------------------------------------
 
 ```{r}
-content_print$section(data$positions, 'by_me_press')
+printer %<>% print_section('by_me_press')
 ```
 
 
@@ -214,27 +215,13 @@ Selected Publications, Posters, and Talks {data-icon=book}
 --------------------------------------------------------------------------------
 
 ```{r}
-content_print$section(data$positions, 'academic_articles')
+printer %<>% print_section('academic_articles')
 ```
 
 
 
 ```{r}
-if(params$pdf){
-  cat("
-  
-Links {data-icon=link}
---------------------------------------------------------------------------------
-
-<br>
-
-
-")
-  
-  walk2(links, 1:length(links), function(link, index){
-    print(glue('{index}. {link}'))
-  })
-}
+printer %<>% print_links()
 ```
 
 

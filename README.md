@@ -6,6 +6,10 @@ As I get older and more crotchety I find it more and more difficult to manually 
 
 I have attempted to keep the whole thing as easy as possible to understand and modify by using a publically available sheet and preserving the old CSV driven way behind a boolean variable that can be set in the setup chunk. 
 
+## cvdown package
+
+Newer versions of this CV have been migrated to using the package [`cvdown`](https://github.com/nstrayer/cvdown). This package provides some helper functions that abstract away the annoyingly verbose code needed to keep track of links and build sections. It is built to be highly customizable, however, so you're not locked into a given format for your CV. That's the whole point of this endevor!
+
 
 ## Structure
 
@@ -18,8 +22,6 @@ The main files are:
   - `strayer_cv.pdf`: The final exported pdf as rendered by Chrome on my mac laptop. Links are put in footer and notes about online version are added. 
 - `resume.Rmd`: Source template for single page resume. 
   - `resume.html`/`strayer_resume.pdf`: Result for single page resume.
-- `parsing_functions.R`: A series of small functions for parsing a position entry into the proper HTML format. Includes logic for removing links if needed etc..
-- `gather_data.R`: Loads the data that makes up the body of both the CV and resume. Either pulls from a specified google sheet with info or multiple csvs. (Examples of both are provided in repo.)
 - `csvs/*.csv`: A series of CSVs containing the information CV and resume. Included as examples if the non-googlesheets method of storing data is prefered.  
 - `css/`: Directory containing the custom CSS files used to tweak the default 'resume' format from pagedown. 
 
