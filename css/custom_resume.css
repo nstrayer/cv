@@ -51,10 +51,13 @@
   margin: 0.05in 0 0.05in;
 }
 
+<<<<<<< HEAD
 [data-id="lang"] ul {
   margin: 0.05in 0 0.05in;
 }
 
+=======
+>>>>>>> origin/master
 [data-id="contact"] ul {
   padding-left: 0 !important;
   margin-top: 0.75rem;

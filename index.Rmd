@@ -1,6 +1,11 @@
 ---
+<<<<<<< HEAD
 title: "Keita Abe's CV"
 author: Keita Abe
+=======
+title: "Nick Strayer's CV"
+author: Nick Strayer
+>>>>>>> origin/master
 date: "`r Sys.Date()`"
 output:
   pagedown::html_resume:
@@ -27,7 +32,11 @@ library(tidyverse)
 using_googlesheets <- TRUE
 
 # Just the copied URL from the sheet
+<<<<<<< HEAD
 positions_sheet_loc <- "https://docs.google.com/spreadsheets/d/1QaWldSn166FR1pwyurwo1Ag0lv0yMN8y5ESi3k89mec"
+=======
+positions_sheet_loc <- "https://docs.google.com/spreadsheets/d/14MQICF2F8-vf8CKPF1m4lyGKO6_thG-4aSwat1e2TWc"
+>>>>>>> origin/master
 
 # Is this sheet available for anyone to read? If you're using a private sheet
 # set this to false and go to gather_data.R and run the data loading manually
@@ -40,8 +49,13 @@ sheet_is_publicly_readable <- TRUE
 PDF_EXPORT <- FALSE
 
 
+<<<<<<< HEAD
 CV_PDF_LOC <- "https://github.com/keita43a/cv/raw/master/keita_abe_cv.pdf"
 CV_HTML_LOC <- ""
+=======
+CV_PDF_LOC <- "https://github.com/nstrayer/cv/raw/master/strayer_cv.pdf"
+CV_HTML_LOC <- "nickstrayer.me/cv/"
+>>>>>>> origin/master
 
 
 # A global (gasp) variable that holds all the links that were inserted for
@@ -78,7 +92,11 @@ Aside
 ================================================================================
 
 
+<<<<<<< HEAD
 ![logo](NHH_logo.png){width=100%}
+=======
+![logo](logo.png){width=100%}
+>>>>>>> origin/master
 
 ```{r}
 # When in export mode the little dots are unaligned, so fix that. 
@@ -99,26 +117,38 @@ contact_info %>%
 
 
 
+<<<<<<< HEAD
 Skills {#skills}
+=======
+Language Skills {#skills}
+>>>>>>> origin/master
 --------------------------------------------------------------------------------
 
 ```{r}
 build_skill_bars(skills)
 ```
 
+<<<<<<< HEAD
 Language {#lang}
 --------------------------------------------------------------------------------
 
 ```{r}
 build_skill_bars(lang)
 ```
+=======
+
+>>>>>>> origin/master
 
 Disclaimer {#disclaimer}
 --------------------------------------------------------------------------------
 
 Made with the R package [**pagedown**](https://github.com/rstudio/pagedown). 
 
+<<<<<<< HEAD
 I built this cv based on the source code available at [github.com/nstrayer/cv](https://github.com/nstrayer/cv).
+=======
+The source code is available at [github.com/nstrayer/cv](https://github.com/nstrayer/cv).
+>>>>>>> origin/master
 
 Last updated on `r Sys.Date()`.
 
@@ -127,7 +157,11 @@ Last updated on `r Sys.Date()`.
 Main
 ================================================================================
 
+<<<<<<< HEAD
 Keita Abe {#title}
+=======
+Nick Strayer {#title}
+>>>>>>> origin/master
 --------------------------------------------------------------------------------
 
 ```{r}
@@ -145,7 +179,11 @@ print_section(position_data, 'education')
 
 
 
+<<<<<<< HEAD
 Research Positions {data-icon=laptop}
+=======
+Research Experience {data-icon=laptop}
+>>>>>>> origin/master
 --------------------------------------------------------------------------------
 
 ```{r}
@@ -154,6 +192,23 @@ print_section(position_data, 'research_positions')
 
 
 
+<<<<<<< HEAD
+=======
+Industry Experience {data-icon=suitcase}
+--------------------------------------------------------------------------------
+
+::: aside
+```{r}
+print_text_block(text_blocks, 'industy_experience_aside')
+```
+:::
+
+```{r}
+print_section(position_data, 'industry_positions')
+```
+
+<!-- These breaks just force a new page so section doesnt get cut off -->
+>>>>>>> origin/master
 <br>
 <br>
 <br>
@@ -173,16 +228,25 @@ print_section(position_data, 'teaching_positions')
 
 
 
+<<<<<<< HEAD
 Publications {data-icon=book}
+=======
+Selected Data Science Writing {data-icon=chart-line}
+>>>>>>> origin/master
 --------------------------------------------------------------------------------
 
 ::: aside
 ```{r}
+<<<<<<< HEAD
 print_text_block(text_blocks, 'academic_articles_aside')
+=======
+print_text_block(text_blocks, 'data_science_writing_aside')
+>>>>>>> origin/master
 ```
 :::
 
 ```{r}
+<<<<<<< HEAD
 print_section(position_data, 'academic_articles')
 ```
 
@@ -222,6 +286,43 @@ print_section(position_data, 'workshops')
 ```
 
 
+=======
+print_section(position_data, 'data_science_writings')
+```
+
+
+
+Selected Press (About)  {data-icon=newspaper}
+--------------------------------------------------------------------------------
+
+```{r}
+print_section(position_data, 'about_me_press')
+```
+
+
+<br>
+<br>
+
+
+Selected Press (By)  {data-icon=newspaper}
+--------------------------------------------------------------------------------
+
+```{r}
+print_section(position_data, 'by_me_press')
+```
+
+
+
+Selected Publications, Posters, and Talks {data-icon=book}
+--------------------------------------------------------------------------------
+
+```{r}
+print_section(position_data, 'academic_articles')
+```
+
+
+
+>>>>>>> origin/master
 ```{r}
 if(PDF_EXPORT){
   cat("
