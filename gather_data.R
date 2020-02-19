@@ -20,12 +20,8 @@ if(using_googlesheets){
   
   
   position_data <- read_sheet(positions_sheet_loc, sheet = "positions")
-<<<<<<< HEAD
   skills        <- read_sheet(positions_sheet_loc, sheet = "skills")
   lang        <- read_sheet(positions_sheet_loc, sheet = "language")
-=======
-  skills        <- read_sheet(positions_sheet_loc, sheet = "language_skills")
->>>>>>> origin/master
   text_blocks   <- read_sheet(positions_sheet_loc, sheet = "text_blocks")
   contact_info  <- read_sheet(positions_sheet_loc, sheet = "contact_info", skip = 1)
   
