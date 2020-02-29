@@ -94,7 +94,7 @@ Contact {#contact}
 
 ```{r}
 contact_info %>% 
-  glue_data("- <i class='fa fa-{icon}'></i> {contact}")
+  glue_data("- <i class='fa fa-{icon}'></i> [{contact}]({link})")
 ```
 
 
