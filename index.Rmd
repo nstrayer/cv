@@ -24,7 +24,7 @@ library(tidyverse)
 
 # Is data stored in google sheets? If no data will be gather from the csvs/
 # folder in project
-using_googlesheets <- TRUE
+using_googlesheets <- FALSE
 
 # Just the copied URL from the sheet
 positions_sheet_loc <- "https://docs.google.com/spreadsheets/d/14MQICF2F8-vf8CKPF1m4lyGKO6_thG-4aSwat1e2TWc"
@@ -94,7 +94,7 @@ Contact {#contact}
 
 ```{r}
 contact_info %>% 
-  glue_data("- <i class='fa fa-{icon}'></i> {contact}")
+  glue_data("- <i class='fa fa-{icon}'></i> [{contact}]({link})")
 ```
 
 
