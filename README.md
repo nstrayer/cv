@@ -25,7 +25,8 @@ The main files are:
 
 ## Want to use this to build your own CV/resume? 
 
-1. Fork, clone, download the zip of this repo to your machine with RStudio.
+0. Install RStudio and the [googlesheets4](https://googlesheets4.tidyverse.org/index.html) package.
+1. Fork this repository, then use [RStudio to clone and download](https://cfss.uchicago.edu/setup/git-with-rstudio/) the zip of your repo to your machine.
 2. Make a copy of my [info-holding google sheet](https://docs.google.com/spreadsheets/d/14MQICF2F8-vf8CKPF1m4lyGKO6_thG-4aSwat1e2TWc/edit#gid=1730172225) and fill in your personal info for all the sheets (`positions`, `language_skills`, `text_blocks`, and `contact_info`). 
     a. If you want to use CSV's instead of google sheets, update the contents of the CSVs stored in the `csvs/` folder. 
 3. Go through and personalize the supplementary text in the Rmd you desire (`index.Rmd` for CV, `resume.Rmd` for resume).
