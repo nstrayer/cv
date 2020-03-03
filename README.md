@@ -33,7 +33,7 @@ The main files are:
     a. If you want to use CSV's instead of google sheets, update the contents of the CSVs stored in the `csvs/` folder. 
 3. Go through and personalize the supplementary text in the Rmd you desire (`index.Rmd` for CV, `resume.Rmd` for resume).     
    * Also edit the URL assignment of `positions_sheet_loc` in the Rmd file to point to the **shareable link** for your copy of the Google Sheet. 
-4. Run the file `index.Rmd` to generate the CV. 
+4. Load file `index.Rmd` and press "Knit" at the top to generate the CV. 
 5. You can also print each unique `section` (as encoded in the `section` column of `positions.csv`) in your `.Rmd` with the command `position_data %>% print_section('education')`.
 6. Get the PDF out by viewing in your browser and then doing `control/command + P` and selecting "print to pdf". Alternatively use `pagedown::chrome_print()` or `knit: pagedown::chrome_print` in RMD header. See [pagedown docs on printing](https://pagedown.rbind.io/#print-to-pdf) for more details.
 7. Let the world know how awesome you are! (Also send me a tweet/email if you desired and I will broadcast your version of the CV on this repo and or twitter.)
