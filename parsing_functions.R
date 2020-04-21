@@ -44,12 +44,27 @@ strip_links_from_cols <- function(data, cols_to_strip){
   data
 }
 
+# Tests if the end date is set as current, via values in the current_names vector
+date_is_current <- function(date){
+  current_names <- c("current", "now", "")
+  tolower(date) %in% current_names 
+}
+
+# This year is assigned to the end date of "current" events to make sure they get sorted later. 
+future_year <- lubridate::year(lubridate::ymd(Sys.Date())) + 10
+
 # Take a position dataframe and the section id desired
 # and prints the section to markdown. 
 print_section <- function(position_data, section_id){
   position_data %>% 
+      # Google sheets loves to turn columns into list ones if there are different types
+    mutate_if(is.list, purrr::map_chr, as.character) %>% 
     filter(section == section_id) %>% 
-    arrange(desc(end)) %>% 
+    mutate(
+      end = ifelse(is.na(end), "Current", end),
+      end_num = as.integer(ifelse(date_is_current(end), future_year, end))
+    ) %>% 
+    arrange(desc(end_num)) %>% 
     mutate(id = 1:n()) %>% 
     pivot_longer(
       starts_with('description'),
