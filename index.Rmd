@@ -15,62 +15,25 @@ knitr::opts_chunk$set(
   echo = FALSE
 )
 
-library(glue)
-library(tidyverse)
-
+source('CV_Printer.R') 
 # ======================================================================
 # These variables determine how the the data is loaded and how the exports are
 # done.
 
-# Is data stored in google sheets? If no data will be gather from the csvs/
-# folder in project
-using_googlesheets <- TRUE
 
-# Just the copied URL from the sheet
-positions_sheet_loc <- "https://docs.google.com/spreadsheets/d/14MQICF2F8-vf8CKPF1m4lyGKO6_thG-4aSwat1e2TWc"
+cv_printer <- CV_Printer$new(
+  data_loc = "https://docs.google.com/spreadsheets/d/14MQICF2F8-vf8CKPF1m4lyGKO6_thG-4aSwat1e2TWc",  
+  pdf_location = "https://github.com/nstrayer/cv/raw/master/strayer_cv.pdf",
+  html_location = "nickstrayer.me/cv/")
+```
 
-# Is this sheet available for anyone to read? If you're using a private sheet
-# set this to false and go to gather_data.R and run the data loading manually
-# once to cache authentication
-sheet_is_publicly_readable <- TRUE
-
-# Is the goal of this knit to build a document that is exported to PDF? If so
-# set this to true to have links turned into footnotes at the end of the
-# document
-PDF_EXPORT <- FALSE
-
-
-CV_PDF_LOC <- "https://github.com/nstrayer/cv/raw/master/strayer_cv.pdf"
-CV_HTML_LOC <- "nickstrayer.me/cv/"
-
-
-# A global (gasp) variable that holds all the links that were inserted for
-# placement at the end
-links <- c()
-
-# ======================================================================
-# Now we source two external scripts. One contains functions for building the
-# text output and the other loads up our data from either googlesheets or csvs
-
-# Functions for building sections from CSV data
-source('parsing_functions.R') 
-
-# Load data for CV/Resume
-source('gather_data.R')
+```{r}
+cv_printer$set_pdf_mode(FALSE)
 ```
 
 
-
 ```{r}
-# When in export mode the little dots are unaligned, so fix that. 
-if(PDF_EXPORT){
-  cat("
-  <style>
-  :root{
-    --decorator-outer-offset-left: -6.5px;
-  }
-  </style>")
-}
+cv_printer$set_style()
 ```
 
 
@@ -81,20 +44,14 @@ Aside
 ![logo](logo.png){width=100%}
 
 ```{r}
-# When in export mode the little dots are unaligned, so fix that. 
-if(PDF_EXPORT){
-  glue("View this CV online with links at _{CV_HTML_LOC}_")
-} else {
-  glue("[<i class='fas fa-download'></i> Download a PDF of this CV]({CV_PDF_LOC})")
-}
+cv_printer$print_link_to_other_format()
 ```
 
 Contact {#contact}
 --------------------------------------------------------------------------------
 
 ```{r}
-contact_info %>% 
-  glue_data("- <i class='fa fa-{icon}'></i> {contact}")
+cv_printer$print_contact_info()
 ```
 
 
@@ -103,7 +60,7 @@ Language Skills {#skills}
 --------------------------------------------------------------------------------
 
 ```{r}
-build_skill_bars(skills)
+cv_printer$print_skill_bars()
 ```
 
 
@@ -126,7 +83,7 @@ Nick Strayer {#title}
 --------------------------------------------------------------------------------
 
 ```{r}
-print_text_block(text_blocks, 'intro')
+cv_printer$print_text_block("intro")
 ```
 
 
@@ -135,7 +92,7 @@ Education {data-icon=graduation-cap data-concise=true}
 --------------------------------------------------------------------------------
 
 ```{r}
-print_section(position_data, 'education')
+cv_printer$print_section('education')
 ```
 
 
@@ -144,7 +101,7 @@ Research Experience {data-icon=laptop}
 --------------------------------------------------------------------------------
 
 ```{r}
-print_section(position_data, 'research_positions')
+cv_printer$print_section('research_positions')
 ```
 
 
@@ -154,12 +111,12 @@ Industry Experience {data-icon=suitcase}
 
 ::: aside
 ```{r}
-print_text_block(text_blocks, 'industy_experience_aside')
+cv_printer$print_text_block('industy_experience_aside')
 ```
 :::
 
 ```{r}
-print_section(position_data, 'industry_positions')
+cv_printer$print_section('industry_positions')
 ```
 
 <!-- These breaks just force a new page so section doesnt get cut off -->
@@ -172,12 +129,12 @@ Teaching Experience {data-icon=chalkboard-teacher}
 
 ::: aside
 ```{r}
-print_text_block(text_blocks, 'teaching_experience_aside')
+cv_printer$print_text_block('teaching_experience_aside')
 ```
 :::
 
 ```{r}
-print_section(position_data, 'teaching_positions')
+cv_printer$print_section('teaching_positions')
 ```
 
 
@@ -187,12 +144,12 @@ Selected Data Science Writing {data-icon=chart-line}
 
 ::: aside
 ```{r}
-print_text_block(text_blocks, 'data_science_writing_aside')
+cv_printer$print_text_block('data_science_writing_aside')
 ```
 :::
 
 ```{r}
-print_section(position_data, 'data_science_writings')
+cv_printer$print_section('data_science_writings')
 ```
 
 
@@ -201,7 +158,7 @@ Selected Press (About)  {data-icon=newspaper}
 --------------------------------------------------------------------------------
 
 ```{r}
-print_section(position_data, 'about_me_press')
+cv_printer$print_section('about_me_press')
 ```
 
 
@@ -213,7 +170,7 @@ Selected Press (By)  {data-icon=newspaper}
 --------------------------------------------------------------------------------
 
 ```{r}
-print_section(position_data, 'by_me_press')
+cv_printer$print_section('by_me_press')
 ```
 
 
@@ -222,27 +179,13 @@ Selected Publications, Posters, and Talks {data-icon=book}
 --------------------------------------------------------------------------------
 
 ```{r}
-print_section(position_data, 'academic_articles')
+cv_printer$print_section('academic_articles')
 ```
 
 
 
 ```{r}
-if(PDF_EXPORT){
-  cat("
-  
-Links {data-icon=link}
---------------------------------------------------------------------------------
-
-<br>
-
-
-")
-  
-  walk2(links, 1:length(links), function(link, index){
-    print(glue('{index}. {link}'))
-  })
-}
+cv_printer$print_links()
 ```
 
 
