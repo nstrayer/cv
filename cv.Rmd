@@ -1,0 +1,358 @@
+---
+title: "Nick Strayer's CV"
+author: Nick Strayer
+date: "`r Sys.Date()`"
+params:
+  pdf_mode:
+    value: true
+output:
+  pagedown::html_resume:
+    css: ['dd_cv.css', 'resume']
+    self_contained: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  results='asis', 
+  echo = FALSE
+)
+library(tidyverse)
+library(magrittr)
+```
+
+```{r, cache = TRUE, include = FALSE}
+# Using an in-development package for building these cvs. Install with
+# devtools::install_github("nstrayer/datadrivencv")
+
+# Read in all data and initialize a CV printer object
+cv_printer <- datadrivencv::CV_Printer$new(
+  data_location = "https://docs.google.com/spreadsheets/d/14MQICF2F8-vf8CKPF1m4lyGKO6_thG-4aSwat1e2TWc",  
+  pdf_location = "https://github.com/nstrayer/cv/raw/master/strayer_cv.pdf",
+  html_location = "nickstrayer.me/cv/")
+
+# This toggles if output is rendered in PDF format or HTML
+cv_printer$set_pdf_mode(params$pdf_mode)
+```
+
+
+```{r}
+# Add some conditional CSS if in PDF mode needed due to quirks in chrome print rendering
+cv_printer$set_style()
+```
+
+
+Aside
+================================================================================
+
+
+```{r}
+positions <- cv_printer$position_data %>% 
+  mutate(
+    id = row_number(),
+    title = stringr::str_remove_all(title, '(\\(.+?\\))|(\\[)|(\\])'),
+    section = stringr::str_replace_all(section, "_", " ") %>% stringr::str_to_title()
+  )
+
+combination_indices <- function(n){
+  rep_counts <- (n:1) - 1
+  tibble(
+    a = rep(1:n, times = rep_counts),
+    b = purrr::flatten_int( purrr::map(rep_counts, ~{tail(1:n, .x)}) )
+  )
+}
+
+edges <- positions %>% 
+  select(id, start, end) %>% 
+  mutate(
+    end = ifelse(end == "Current", lubridate::year(lubridate::ymd(Sys.Date())), end),
+    start = ifelse(start == "N/A", end, start)
+  ) %>% 
+  purrr::pmap_dfr(function(id, start, end){
+    tibble(
+      year = start:end,
+      id = id
+    )
+  }) %>% 
+  group_by(year) %>% 
+  nest() %>% 
+  dplyr::rename(ids_for_year = data) %>% 
+  purrr::pmap_dfr(function(year, ids_for_year){
+    combination_indices(nrow(ids_for_year)) %>% 
+      transmute(
+        year = year,
+        source = ids_for_year$id[a],
+        target = ids_for_year$id[b]
+      )
+  })
+
+network_data <- list(nodes = positions %>% select(-in_resume,-end_num,-timeline),
+                     edges = edges)
+
+glue::glue(
+  "<script id = \"data_for_network\" type = \"application/json\">",
+  "{jsonlite::toJSON(network_data)}",
+  "</script>",
+  "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/d3/5.16.0/d3.min.js\"></script>",
+  "<svg style = \"width: 100%; height:320px; margin-top: -125px;\" id = \"cv_network_viz\"></svg>"
+)
+```
+
+
+
+```{js, echo = FALSE}
+const data_json = document.querySelector("script[type='application/json']").textContent;
+const {edges, nodes} = JSON.parse(data_json);
+
+class MyHandler extends Paged.Handler {
+	constructor(chunker, polisher, caller) {
+		super(chunker, polisher, caller);
+	}
+	
+	afterRendered (){
+		plot_network();
+	}
+}
+Paged.registerHandlers(MyHandler);
+
+function plot_network(){
+  const {width, height} = document.querySelector("svg#cv_network_viz").getBoundingClientRect();
+  
+  const svg = d3.select("svg#cv_network_viz")
+    .attr("width", width)
+    .attr("height", height);
+
+  const unique_sections = [...new Set(nodes.map(d => d.section))];
+  const color_scale = d3.scaleOrdinal()
+    .domain(unique_sections)
+    .range(d3.schemeSet2);
+  
+  const edge_color = d3.scaleLinear()
+    .domain(d3.extent(edges, d => d.year));
+  
+  const simulation = d3.forceSimulation(nodes)
+    .force("link", d3.forceLink(edges).id(d => d.id))
+    .force("charge", d3.forceManyBody())
+    .force("center", d3.forceCenter(width / 2, height / 2))
+    .on("tick", ticked);
+  
+  const g = svg.append("g");
+  
+  const link = g
+    .selectAll("line")
+    .data(edges)
+    .enter().append("line")
+      .attr("stroke", d => d3.interpolateGreys(edge_color(d.year)))
+      .attr("stroke-width", 0.5);
+  
+  const node = g
+    .attr("stroke", "#fff")
+    .attr("stroke-width", 1.5)
+    .selectAll("circle")
+    .data(nodes)
+    .enter().append("circle")
+      .attr("r", 5)
+      .attr("fill", d => color_scale(d.section))
+      .call(drag(simulation));
+  
+  node.append("title")
+      .text(d => `${d.section}\n${d.title}`);
+  
+  svg.call(d3.zoom()
+      .extent([[0, 0], [width, height]])
+      .scaleExtent([1, 8])
+      .on("zoom", zoomed));
+  
+  function ticked() {
+    link
+        .attr("x1", d => d.source.x)
+        .attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x)
+        .attr("y2", d => d.target.y);
+  
+    node
+        .attr("cx", d => d.x)
+        .attr("cy", d => d.y);
+  }
+  
+  function zoomed() {
+    g.attr("transform", d3.event.transform);
+  }
+  
+  function drag(simulation){
+  
+    function dragstarted(d) {
+      if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+      d.fx = d.x;
+      d.fy = d.y;
+    }
+  
+    function dragged(d) {
+      d.fx = d3.event.x;
+      d.fy = d3.event.y;
+    }
+  
+    function dragended(d) {
+      if (!d3.event.active) simulation.alphaTarget(0);
+      d.fx = null;
+      d.fy = null;
+    }
+  
+    return d3.drag()
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended);
+  }
+
+}
+
+//debugger;
+
+```
+
+
+
+```{r}
+cv_printer$print_link_to_other_format()
+```
+
+Contact {#contact}
+--------------------------------------------------------------------------------
+
+```{r}
+cv_printer$print_contact_info()
+```
+
+
+
+Language Skills {#skills}
+--------------------------------------------------------------------------------
+
+```{r}
+cv_printer$print_skill_bars()
+```
+
+
+
+Disclaimer {#disclaimer}
+--------------------------------------------------------------------------------
+
+Made with the R package [**pagedown**](https://github.com/rstudio/pagedown). 
+
+The source code is available [on github.com/nstrayer/cv](https://github.com/nstrayer/cv).
+
+Last updated on `r Sys.Date()`.
+
+
+
+Main
+================================================================================
+
+Nick Strayer {#title}
+--------------------------------------------------------------------------------
+
+```{r}
+cv_printer$print_text_block("intro")
+```
+
+
+
+Education {data-icon=graduation-cap data-concise=true}
+--------------------------------------------------------------------------------
+
+```{r}
+cv_printer$print_section('education')
+```
+
+
+
+Research Experience {data-icon=laptop}
+--------------------------------------------------------------------------------
+
+```{r}
+cv_printer$print_section('research_positions')
+```
+
+
+
+Industry Experience {data-icon=suitcase}
+--------------------------------------------------------------------------------
+
+::: aside
+```{r}
+cv_printer$print_text_block('industy_experience_aside')
+```
+:::
+
+```{r}
+cv_printer$print_section('industry_positions')
+```
+
+<!-- These breaks just force a new page so section doesnt get cut off -->
+<br>
+<br>
+<br>
+
+Teaching Experience {data-icon=chalkboard-teacher}
+--------------------------------------------------------------------------------
+
+::: aside
+```{r}
+cv_printer$print_text_block('teaching_experience_aside')
+```
+:::
+
+```{r}
+cv_printer$print_section('teaching_positions')
+```
+
+
+
+Selected Data Science Writing {data-icon=chart-line}
+--------------------------------------------------------------------------------
+
+::: aside
+```{r}
+cv_printer$print_text_block('data_science_writing_aside')
+```
+:::
+
+```{r}
+cv_printer$print_section('data_science_writings')
+```
+
+
+
+Selected Press (About)  {data-icon=newspaper}
+--------------------------------------------------------------------------------
+
+```{r}
+cv_printer$print_section('about_me_press')
+```
+
+
+<br>
+<br>
+
+
+Selected Press (By)  {data-icon=newspaper}
+--------------------------------------------------------------------------------
+
+```{r}
+cv_printer$print_section('by_me_press')
+```
+
+
+
+Selected Publications, Posters, and Talks {data-icon=book}
+--------------------------------------------------------------------------------
+
+```{r}
+cv_printer$print_section('academic_articles')
+```
+
+
+
+```{r}
+cv_printer$print_links()
+```
+
