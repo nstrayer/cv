@@ -1,0 +1,199 @@
+---
+title: "Nick Strayer's CV"
+author: Nick Strayer
+date: "`r Sys.Date()`"
+params:
+  pdf_mode:
+    value: true
+output:
+  pagedown::html_resume:
+    css: ['dd_cv.css', 'resume']
+    self_contained: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  results='asis', 
+  echo = FALSE
+)
+library(tidyverse)
+library(magrittr)
+```
+
+```{r, cache = TRUE, include = FALSE}
+# Using an in-development package for building these cvs. Install with
+# devtools::install_github("nstrayer/datadrivencv")
+
+# Read in all data and initialize a CV printer object
+cv_printer <- datadrivencv::CV_Printer$new(
+  data_location = "https://docs.google.com/spreadsheets/d/14MQICF2F8-vf8CKPF1m4lyGKO6_thG-4aSwat1e2TWc",  
+  pdf_location = "https://github.com/nstrayer/cv/raw/master/strayer_cv.pdf",
+  html_location = "nickstrayer.me/cv/")
+```
+
+
+```{r}
+# This toggles if output is rendered in PDF format or HTML
+cv_printer$set_pdf_mode(params$pdf_mode)
+
+# Add some conditional CSS if in PDF mode needed due to quirks in chrome print rendering
+cv_printer$set_style()
+```
+
+
+Aside
+================================================================================
+
+
+```{r}
+datadrivencv::build_network_logo(cv_printer$position_data)
+```
+
+
+
+
+```{r}
+cv_printer$print_link_to_other_format()
+```
+
+Contact {#contact}
+--------------------------------------------------------------------------------
+
+```{r}
+cv_printer$print_contact_info()
+```
+
+
+
+Language Skills {#skills}
+--------------------------------------------------------------------------------
+
+```{r}
+cv_printer$print_skill_bars()
+```
+
+
+
+Disclaimer {#disclaimer}
+--------------------------------------------------------------------------------
+
+Made with the R package [**pagedown**](https://github.com/rstudio/pagedown). 
+
+The source code is available [on github.com/nstrayer/cv](https://github.com/nstrayer/cv).
+
+Last updated on `r Sys.Date()`.
+
+
+
+Main
+================================================================================
+
+Nick Strayer {#title}
+--------------------------------------------------------------------------------
+
+```{r}
+cv_printer$print_text_block("intro")
+```
+
+
+
+Education {data-icon=graduation-cap data-concise=true}
+--------------------------------------------------------------------------------
+
+```{r}
+cv_printer$print_section('education')
+```
+
+
+
+Research Experience {data-icon=laptop}
+--------------------------------------------------------------------------------
+
+```{r}
+cv_printer$print_section('research_positions')
+```
+
+
+
+Industry Experience {data-icon=suitcase}
+--------------------------------------------------------------------------------
+
+::: aside
+```{r}
+cv_printer$print_text_block('industy_experience_aside')
+```
+:::
+
+```{r}
+cv_printer$print_section('industry_positions')
+```
+
+<!-- These breaks just force a new page so section doesnt get cut off -->
+<br>
+<br>
+<br>
+
+Teaching Experience {data-icon=chalkboard-teacher}
+--------------------------------------------------------------------------------
+
+::: aside
+```{r}
+cv_printer$print_text_block('teaching_experience_aside')
+```
+:::
+
+```{r}
+cv_printer$print_section('teaching_positions')
+```
+
+
+
+Selected Data Science Writing {data-icon=chart-line}
+--------------------------------------------------------------------------------
+
+::: aside
+```{r}
+cv_printer$print_text_block('data_science_writing_aside')
+```
+:::
+
+```{r}
+cv_printer$print_section('data_science_writings')
+```
+
+
+
+Selected Press (About)  {data-icon=newspaper}
+--------------------------------------------------------------------------------
+
+```{r}
+cv_printer$print_section('about_me_press')
+```
+
+
+<br>
+<br>
+
+
+Selected Press (By)  {data-icon=newspaper}
+--------------------------------------------------------------------------------
+
+```{r}
+cv_printer$print_section('by_me_press')
+```
+
+
+
+Selected Publications, Posters, and Talks {data-icon=book}
+--------------------------------------------------------------------------------
+
+```{r}
+cv_printer$print_section('academic_articles')
+```
+
+
+
+```{r}
+cv_printer$print_links()
+```
+
