@@ -1,9 +1,12 @@
 ---
 title: "Nick Strayer's CV"
+subtitle: "A Visual Datascientist"
 author: Nick Strayer
 date: "`r Sys.Date()`"
 params:
   pdf_mode:
+    value: false
+  cache_data:
     value: true
 output:
   pagedown::html_resume:
@@ -18,22 +21,27 @@ knitr::opts_chunk$set(
 )
 
 library(magrittr) # For the pipe
-source("CV_printing_functions.R")
+source("cv_printing_functions.r")
 
 # Read in all data and initialize a CV printer object
 CV <- create_CV_object(
   data_location = "https://docs.google.com/spreadsheets/d/14MQICF2F8-vf8CKPF1m4lyGKO6_thG-4aSwat1e2TWc",  
-  pdf_location = "https://github.com/nstrayer/cv/raw/master/strayer_cv.pdf",
-  html_location = "nickstrayer.me/cv/",
-  pdf_mode = params$pdf_mode
+  pdf_mode = params$pdf_mode,
+  cache_data = params$cache_data
 )
-
 ```
 
 
 ```{r}
-# Add some conditional CSS if in PDF mode needed due to quirks in chrome print rendering
-CV %>% set_style()
+# When in pdf export mode the little dots are unaligned, so fix that with some conditional CSS.
+if(params$pdf_mode) {
+    cat("
+<style>
+:root{
+  --decorator-outer-offset-left: -6.5px;
+}
+</style>")
+}
 ```
 
 
@@ -48,7 +56,11 @@ datadrivencv::build_network_logo(CV$entries_data)
 
 
 ```{r}
-CV %>% print_link_to_other_format()
+if(params$pdf_mode){
+  cat("View this CV online with links at _nickstrayer.me/cv/_")
+} else {
+  cat("[<i class='fas fa-download'></i> Download a PDF of this CV](https://github.com/nstrayer/cv/raw/master/strayer_cv.pdf)")
+}
 ```
 
 Contact {#contact}
