@@ -17,7 +17,6 @@ cache_data <- TRUE
 
 # Knit the HTML version
 rmarkdown::render("cv.rmd",
-                  output_format = rmarkdown::html_document(css =  c('html_version.css')),
                   params = list(pdf_mode = FALSE, cache_data = cache_data),
                   output_file = "index.html")
 
