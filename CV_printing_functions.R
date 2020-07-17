@@ -4,34 +4,90 @@
 
 #' Create a CV_Printer object.
 #'
-#' @param data_location Path of the spreadsheets holding all your data. This can be
-#'   either a URL to a google sheet with multiple sheets containing the four
+#' @param data_location Path of the spreadsheets holding all your data. This can
+#'   be either a URL to a google sheet with multiple sheets containing the four
 #'   data types or a path to a folder containing four `.csv`s with the neccesary
 #'   data.
-#' @param pdf_location What location will the PDF of this CV be hosted at?
-#' @param html_location What location will the HTML version of this CV be hosted at?
 #' @param source_location Where is the code to build your CV hosted?
-#' @param pdf_mode Is the output being rendered into a pdf? Aka do links need
-#'   to be stripped?
-#' @param sheet_is_publicly_readable If you're using google sheets for data,
-#'   is the sheet publicly available? (Makes authorization easier.)
+#' @param pdf_mode Is the output being rendered into a pdf? Aka do links need to
+#'   be stripped?
+#' @param sheet_is_publicly_readable If you're using google sheets for data, is
+#'   the sheet publicly available? (Makes authorization easier.)
+#' @param cache_data If set to true when data is read in it will be saved to an
+#'   `.rds` object so it doesn't need to be repeatedly pulled from google
+#'   sheets. This is also nice when you have non-public sheets that don't play
+#'   nice with authentication during the knit process.
 #' @return A new `CV_Printer` object.
 create_CV_object <-  function(data_location,
                               pdf_mode = FALSE,
-                              html_location,
-                              pdf_location,
-                              sheet_is_publicly_readable = TRUE) {
+                              sheet_is_publicly_readable = TRUE,
+                              cache_data = TRUE) {
 
   cv <- list(
     pdf_mode = pdf_mode,
-    html_location = html_location,
-    pdf_location = pdf_location,
-    links = c()
-  )
+    links = c(),
+    cache_data = cache_data
+  ) %>%
+    load_data(data_location, sheet_is_publicly_readable)
 
+
+  extract_year <- function(dates){
+    date_year <- stringr::str_extract(dates, "(20|19)[0-9]{2}")
+    date_year[is.na(date_year)] <- lubridate::year(lubridate::ymd(Sys.Date())) + 10
+
+    date_year
+  }
+
+  parse_dates <- function(dates){
+
+    date_month <- stringr::str_extract(dates, "(\\w+|\\d+)(?=(\\s|\\/|-)(20|19)[0-9]{2})")
+    date_month[is.na(date_month)] <- "1"
+
+    paste("1", date_month, extract_year(dates), sep = "-") %>%
+      lubridate::dmy()
+  }
+
+  # Clean up entries dataframe to format we need it for printing
+  cv$entries_data %<>%
+    tidyr::unite(
+      tidyr::starts_with('description'),
+      col = "description_bullets",
+      sep = "\n- ",
+      na.rm = TRUE
+    ) %>%
+    dplyr::mutate(
+      description_bullets = ifelse(description_bullets != "", paste0("- ", description_bullets), ""),
+      start = ifelse(start == "NULL", NA, start),
+      end = ifelse(end == "NULL", NA, end),
+      start_year = extract_year(start),
+      end_year = extract_year(end),
+      no_start = is.na(start),
+      has_start = !no_start,
+      no_end = is.na(end),
+      has_end = !no_end,
+      timeline = dplyr::case_when(
+        no_start  & no_end  ~ "N/A",
+        no_start  & has_end ~ as.character(end),
+        has_start & no_end  ~ paste("Current", "-", start),
+        TRUE                ~ paste(end, "-", start)
+      )
+    ) %>%
+    dplyr::arrange(desc(parse_dates(end))) %>%
+    dplyr::mutate_all(~ ifelse(is.na(.), 'N/A', .))
+
+  cv
+}
+
+# Load data for CV
+load_data <- function(cv, data_location, sheet_is_publicly_readable){
+  cache_loc <- "ddcv_cache.rds"
+  has_cached_data <- fs::file_exists(cache_loc)
   is_google_sheets_location <- stringr::str_detect(data_location, "docs\\.google\\.com")
 
-  if(is_google_sheets_location){
+  if(has_cached_data & cv$cache_data){
+
+    cv <- c(cv, readr::read_rds(cache_loc))
+  } else if(is_google_sheets_location){
     if(sheet_is_publicly_readable){
       # This tells google sheets to not try and authenticate. Note that this will only
       # work if your sheet has sharing set to "anyone with link can view"
@@ -43,53 +99,45 @@ create_CV_object <-  function(data_location,
       options(gargle_oauth_cache = ".secrets")
     }
 
-    cv$entries_data <- googlesheets4::read_sheet(data_location, sheet = "entries", skip = 1) %>%
-      # Google sheets loves to turn columns into list ones if there are different types
-      dplyr::mutate_if(is.list, purrr::map_chr, as.character)
-
-    cv$skills        <- googlesheets4::read_sheet(data_location, sheet = "language_skills", skip = 1)
-    cv$text_blocks   <- googlesheets4::read_sheet(data_location, sheet = "text_blocks", skip = 1)
-    cv$contact_info  <- googlesheets4::read_sheet(data_location, sheet = "contact_info", skip = 1)
+    read_gsheet <- function(sheet_id){
+      googlesheets4::read_sheet(data_location, sheet = sheet_id, skip = 1, col_types = "c")
+    }
+    cv$entries_data  <- read_gsheet(sheet_id = "entries")
+    cv$skills        <- read_gsheet(sheet_id = "language_skills")
+    cv$text_blocks   <- read_gsheet(sheet_id = "text_blocks")
+    cv$contact_info  <- read_gsheet(sheet_id = "contact_info")
   } else {
     # Want to go old-school with csvs?
-    cv$entries_data <- readr::read_csv(paste0(data_location, "entries.csv"))
-    cv$skills       <- readr::read_csv(paste0(data_location, "language_skills.csv"))
-    cv$text_blocks  <- readr::read_csv(paste0(data_location, "text_blocks.csv"))
+    cv$entries_data <- readr::read_csv(paste0(data_location, "entries.csv"), skip = 1)
+    cv$skills       <- readr::read_csv(paste0(data_location, "language_skills.csv"), skip = 1)
+    cv$text_blocks  <- readr::read_csv(paste0(data_location, "text_blocks.csv"), skip = 1)
     cv$contact_info <- readr::read_csv(paste0(data_location, "contact_info.csv"), skip = 1)
   }
 
+  if(cv$cache_data & !has_cached_data){
+    # Make sure we only cache the data and not settings etc.
+    readr::write_rds(
+      list(
+        entries_data = cv$entries_data,
+        skills = cv$skills,
+        text_blocks = cv$text_blocks,
+        contact_info = cv$contact_info
+      ),
+      cache_loc
+    )
 
-  # This year is assigned to the end date of "current" events to make sure they get sorted later.
-  future_year <- lubridate::year(lubridate::ymd(Sys.Date())) + 10
+    cat(glue::glue("CV data is cached at {cache_loc}.\n"))
+  }
 
-  # Clean up entries dataframe to format we need it for printing
-  cv$entries_data %<>%
-    tidyr::unite(
-      tidyr::starts_with('description'),
-      col = "description_bullets",
-      sep = "\n- ",
-      na.rm = TRUE
-    ) %>%
-    dplyr::mutate(
-      description_bullets = paste0("- ", description_bullets),
-      end = ifelse(is.na(end), "Current", end),
-      end_num = ifelse(tolower(end) %in% c("current", "now", ""), future_year, end),
-      timeline = ifelse(is.na(start) | start == end,
-                        end,
-                        glue::glue('{end} - {start}'))
-    ) %>%
-    dplyr::arrange(desc(end_num)) %>%
-    dplyr::mutate_all(~ ifelse(is.na(.), 'N/A', .))
-
-  cv
+  invisible(cv)
 }
 
 
 # Remove links from a text block and add to internal list
 sanitize_links <- function(cv, text){
   if(cv$pdf_mode){
-    link_titles <- stringr::str_extract_all(text, '(?<=\\[).+?(?=\\])')[[1]]
-    link_destinations <- stringr::str_extract_all(text, '(?<=\\().+?(?=\\))')[[1]]
+    link_titles <- stringr::str_extract_all(text, '(?<=\\[).+?(?=\\]\\()')[[1]]
+    link_destinations <- stringr::str_extract_all(text, '(?<=\\]\\().+?(?=\\))')[[1]]
 
     n_links <- length(cv$links)
     n_new_links <- length(link_titles)
@@ -107,7 +155,7 @@ sanitize_links <- function(cv, text){
       # Replace the link destination and remove square brackets for title
       text <- text %>%
         stringr::str_replace_all(stringr::fixed(link_superscript_mappings)) %>%
-        stringr::str_replace_all('\\[(.+?)\\]', "\\1")
+        stringr::str_replace_all('\\[(.+?)\\](?=<sup>)', "\\1")
     }
   }
 
@@ -177,11 +225,11 @@ print_skill_bars <- function(cv, out_of = 5, bar_color = "#969696", bar_backgrou
   class = 'skill-bar'
   style = \"background:linear-gradient(to right,
                                       {bar_color} {width_percent}%,
-                                      {bar_background} {width_percent}% 100%)\"
+                                      {bar_background} {width_percent}% 100%);\"
 >{skill}</div>"
   }
   cv$skills %>%
-    dplyr::mutate(width_percent = round(100*level/out_of)) %>%
+    dplyr::mutate(width_percent = round(100*as.numeric(level)/out_of)) %>%
     glue::glue_data(glue_template) %>%
     print()
 
@@ -221,35 +269,4 @@ print_contact_info <- function(cv){
   ) %>% print()
 
   invisible(cv)
-}
-
-
-
-#' @description Small addendum that links to pdf version of CV if currently HTML and HTML if currently PDF.
-print_link_to_other_format <- function(cv){
-  # When in export mode the little dots are unaligned, so fix that.
-  if(cv$pdf_mode){
-    print(glue::glue("View this CV online with links at _{cv$html_location}_"))
-  } else {
-    print(glue::glue("[<i class='fas fa-download'></i> Download a PDF of this CV]({cv$pdf_location})"))
-  }
-
-  invisible(cv)
-}
-
-
-
-#' @description Appends some styles specific to PDF output.
-set_style <- function(cv){
-  # When in export mode the little dots are unaligned, so fix that.
-  if(cv$pdf_mode) {
-    cat("
-<style>
-:root{
-  --decorator-outer-offset-left: -6.5px;
-}
-</style>")
-  }
-
-invisible(cv)
 }
