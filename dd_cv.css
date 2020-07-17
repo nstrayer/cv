@@ -101,7 +101,6 @@ sup {
   width: 100%;
 }
 
-
 /* When the class no-timeline is added we remove the after psuedo element from the header... */
 
 /* Removes the psuedo element on h2 tags for this section */
@@ -115,10 +114,15 @@ sup {
 }
 
 /* Add styles for little cards  */
-.info-card{
-  width: 220px;    
-  float: left;    
+.info-card {
+  width: 220px;
+  float: left;
   padding: 0.5rem;
   margin: 0.5rem;
   box-shadow: 1px 1px 4px black;
+}
+
+/* Make the network viz go up near the top */
+svg {
+  margin-top: -1.25in;
 }
