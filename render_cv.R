@@ -8,11 +8,14 @@
 # To use, simply uncomment the following lines and run them once.
 # If you need to update your data delete the "ddcv_cache.rds" file and re-run
 
-# source("CV_printing_functions.R")
-# cv_data <- create_CV_object(
-#   data_location = "https://docs.google.com/spreadsheets/d/14MQICF2F8-vf8CKPF1m4lyGKO6_thG-4aSwat1e2TWc",
-#   cache_data = TRUE
-# )
+library(tidyverse)
+source("CV_printing_functions.R")
+cv_data <- create_CV_object(
+  data_location = "https://docs.google.com/spreadsheets/d/14MQICF2F8-vf8CKPF1m4lyGKO6_thG-4aSwat1e2TWc",
+  cache_data = FALSE
+)
+
+readr::write_rds(cv_data, 'cached_positions.rds')
 cache_data <- TRUE
 
 # Knit the HTML version

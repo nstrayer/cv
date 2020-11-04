@@ -1,11 +1,10 @@
 ---
 title: "Nick Strayer's CV"
-subtitle: "A Visual Datascientist"
 author: Nick Strayer
 date: "`r Sys.Date()`"
 params:
   pdf_mode:
-    value: false
+    value: true
   cache_data:
     value: true
 output:
@@ -24,11 +23,14 @@ library(magrittr) # For the pipe
 source("cv_printing_functions.r")
 
 # Read in all data and initialize a CV printer object
-CV <- create_CV_object(
-  data_location = "https://docs.google.com/spreadsheets/d/14MQICF2F8-vf8CKPF1m4lyGKO6_thG-4aSwat1e2TWc",  
-  pdf_mode = params$pdf_mode,
-  cache_data = params$cache_data
-)
+# CV <- create_CV_object(
+#   data_location = "https://docs.google.com/spreadsheets/d/14MQICF2F8-vf8CKPF1m4lyGKO6_thG-4aSwat1e2TWc",  
+#   pdf_mode = params$pdf_mode,
+#   cache_data = params$cache_data
+# )
+
+CV <- readr::read_rds('cached_positions.rds')
+
 ```
 
 
@@ -112,6 +114,12 @@ Education {data-icon=graduation-cap data-concise=true}
 CV %<>% print_section('education')
 ```
 
+Industry Experience {data-icon=suitcase}
+--------------------------------------------------------------------------------
+
+```{r}
+CV %<>% print_section('industry_positions')
+```
 
 
 Research Experience {data-icon=laptop}
@@ -123,18 +131,6 @@ CV %<>% print_section('research_positions')
 
 
 
-Industry Experience {data-icon=suitcase}
---------------------------------------------------------------------------------
-
-::: aside
-```{r}
-CV %<>% print_text_block('industy_experience_aside')
-```
-:::
-
-```{r}
-CV %<>% print_section('industry_positions')
-```
 
 <!-- These breaks just force a new page so section doesnt get cut off -->
 <br>
@@ -204,3 +200,4 @@ CV %<>% print_section('academic_articles')
 ```{r}
 CV %<>% print_links()
 ```
+
