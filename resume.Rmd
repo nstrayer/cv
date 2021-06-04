@@ -72,34 +72,24 @@ Highly Skilled
 - SAS
 - Shiny
 - Markdown
+- SQL (Snowflake, SQLServer etc)
+- Power BI
+- Tableau
+- Python
+- HTML
+- CSS
+- DSS
+- Looker
+- dbt
+- 
 
 Experience With
 
-- Python 3 (Currently learning)
-- HTML
-- CSS
-- Tableau
-- Power BI (Currently learning)
+- AWS 
 - Matlab
 - STATA
-- SQL
-
-Relevant Package Knowledge {#packages}
---------------------------------------------------------------------------------
-- ggplot2
-- tm
-- dplyr
-- caret
-- shiny
-- esquisse
-- lubridate
-- janitor 
-- stringr
-- glue
-- RSQLite
-- plotly
-- golem
-- etc
+- Docker
+- Airflow
 
 
 More Info {#more-info}
