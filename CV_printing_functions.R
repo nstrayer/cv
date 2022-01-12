@@ -91,7 +91,7 @@ load_data <- function(cv, data_location, sheet_is_publicly_readable){
     if(sheet_is_publicly_readable){
       # This tells google sheets to not try and authenticate. Note that this will only
       # work if your sheet has sharing set to "anyone with link can view"
-      googlesheets4::sheets_deauth()
+      googlesheets4::gs4_deauth()
     } else {
       # My info is in a public sheet so there's no need to do authentication but if you want
       # to use a private sheet, then this is the way you need to do it.
