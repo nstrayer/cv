@@ -5,8 +5,6 @@ date: "`r Sys.Date()`"
 params:
   pdf_mode:
     value: true
-  cache_data:
-    value: true
 output:
   pagedown::html_resume:
     css: ['dd_cv.css', 'resume']
@@ -22,14 +20,12 @@ knitr::opts_chunk$set(
 library(magrittr) # For the pipe
 source("cv_printing_functions.r")
 
-# Read in all data and initialize a CV printer object
-# CV <- create_CV_object(
-#   data_location = "https://docs.google.com/spreadsheets/d/14MQICF2F8-vf8CKPF1m4lyGKO6_thG-4aSwat1e2TWc",  
-#   pdf_mode = params$pdf_mode,
-#   cache_data = params$cache_data
-# )
 
-CV <- readr::read_rds('cached_positions.rds')
+# Read in all data and initialize a CV printer object
+CV <- create_CV_object(
+  data_location = "https://docs.google.com/spreadsheets/d/14MQICF2F8-vf8CKPF1m4lyGKO6_thG-4aSwat1e2TWc",  
+  pdf_mode = params$pdf_mode
+)
 
 ```
 
