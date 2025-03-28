@@ -86,7 +86,7 @@ create_CV_object <- function(data_location,
         col = "description_bullets",
         sep = "\n- ",
         na.rm = TRUE
-      ) |> 
+      ) |>
       dplyr::mutate(
         description_bullets = ifelse(description_bullets != "", paste0("- ", description_bullets), "")
       )
@@ -210,10 +210,10 @@ print_skill_bars <- function(cv, out_of = 5, bar_color = "#969696", bar_backgrou
   if (glue_template == "default") {
     glue_template <- "
 <div
-  class = 'skill-bar'
-  style = \"background:linear-gradient(to right,
-                                      {bar_color} {width_percent}%,
-                                      {bar_background} {width_percent}% 100%)\"
+class = 'skill-bar'
+style = \"background:linear-gradient(to right,
+           {bar_color} {width_percent}%,
+           {bar_background} {width_percent}% 100%)\"
 >{skill}</div>"
   }
   cv$skills |>

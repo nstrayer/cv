@@ -4,7 +4,7 @@ author: Nick Strayer
 date: "`r Sys.Date()`"
 params:
   pdf_mode:
-    value: true
+    value: false
 output:
   pagedown::html_resume:
     css: ['dd_cv.css', 'dd_resume.css', 'resume']
@@ -16,15 +16,22 @@ knitr::opts_chunk$set(
   echo = FALSE
 )
 
+fontawesome::fa_html_dependency()
+
 source("cv_printing_functions.r")
 
-CV <- readRDS('cached_positions.rds')
 
-# # Read in all data and initialize a CV printer object
-# CV <- create_CV_object(
-#   data_location = "https://docs.google.com/spreadsheets/d/14MQICF2F8-vf8CKPF1m4lyGKO6_thG-4aSwat1e2TWc",  
-#   pdf_mode = params$pdf_mode
-# )
+# Read in all data and initialize a CV printer object
+CV <- create_CV_object(
+  data_location = "https://docs.google.com/spreadsheets/d/14MQICF2F8-vf8CKPF1m4lyGKO6_thG-4aSwat1e2TWc",
+  pdf_mode = FALSE,
+  resume_mode = TRUE
+)
+
+# saveRDS(CV, "cached_cv_data")
+
+# CV <-  readRDS("cached_cv_data")
+
 
 ```
 
@@ -45,6 +52,7 @@ if(params$pdf_mode) {
 Aside
 ================================================================================
 
+
 ```{r}
 # Build interactive network of positions colored by section
 # and connected if they occurred in the same year
@@ -52,9 +60,10 @@ datadrivencv::build_network_logo(CV$entries_data)
 ```
 
 
+
 ```{r}
 if(params$pdf_mode){
-  cat("View this resume online with links at _nickstrayer.me/resume/_")
+  cat("View this resume online with links at _nickstrayer.me/cv/resume_")
 } else {
   cat("[<i class='fas fa-download'></i> Download a PDF of this CV](https://github.com/nstrayer/cv/raw/master/strayer_resume.pdf)")
 }
@@ -84,9 +93,9 @@ CV |> print_skill_bars()
 Disclaimer {#disclaimer}
 --------------------------------------------------------------------------------
 
-Made with the R package [**pagedown**](https://github.com/rstudio/pagedown). 
+Made with my package [**datadrivencv**](https://nickstrayer.me/datadrivencv). 
 
-The source code is available [on github.com/nstrayer/cv](https://github.com/nstrayer/cv).
+The source code is available at [https://github.com/nstrayer/cv](https://github.com/nstrayer/cv).
 
 Last updated on `r Sys.Date()`.
 
@@ -105,13 +114,6 @@ CV <- print_text_block(CV, "intro")
 
 
 
-Education {data-icon=graduation-cap data-concise=true}
---------------------------------------------------------------------------------
-
-```{r}
-CV <- print_section(CV, 'education')
-```
-
 
 Selected Industry Experience {data-icon=suitcase data-concise=true}
 --------------------------------------------------------------------------------
@@ -120,6 +122,14 @@ Selected Industry Experience {data-icon=suitcase data-concise=true}
 ```{r}
 CV <- print_section(CV, 'industry_positions')
 ```
+
+Education {data-icon=graduation-cap data-concise=true}
+--------------------------------------------------------------------------------
+
+```{r}
+CV <- print_section(CV, 'education')
+```
+
 
 
 Selected Data Science Writing {data-icon=chart-line data-concise=true}
